@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "723205613684",
+    "firebase_url": "https://nyangmal-38f77-default-rtdb.firebaseio.com",
+    "project_id": "nyangmal-38f77",
+    "storage_bucket": "nyangmal-38f77.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:723205613684:android:59387e944b53fe82228921",
+        "android_client_info": {
+          "package_name": "kr.kau.nyangmal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD26ni733tikkGSc_FNzpGk0CniIwLs8dQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:723205613684:android:36618c41e3cd185b228921",
+        "android_client_info": {
+          "package_name": "kr.kau.nyangmal3"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD26ni733tikkGSc_FNzpGk0CniIwLs8dQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
