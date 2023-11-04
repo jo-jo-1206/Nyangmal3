@@ -4,33 +4,59 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.recyclerview.widget.RecyclerView
+import kr.kau.nyangmal3.databinding.ReceiveBinding
+import kr.kau.nyangmal3.databinding.SendBinding
 import org.w3c.dom.Text
 
-class CMessageAdapter(private val context: Context, val messageList:ArrayList<CMessageData>):
-    RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class CMessageAdapter(private val context: android.content.Context,private val messageList:ArrayList<CMessageData>):
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    // viewholder를 새로 만들 때 호출되는 메서드 -> 레이아웃을 만든다
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view: View = LayoutInflater.from(context).inflate(R.layout.send, parent, false)
-        return SendViewHolder(view)
+    // recylerview가 viewholder를 새로만들어야 할 때마다 메소드 호출
+    // 뷰홀더와 뷰를 생성하고 초기화
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SendViewHolder {
+        val binding = SendBinding.inflate(LayoutInflater.from(context))
+        return SendViewHolder(binding)
     }
 
-    // 아이템 개수
-    override fun getItemCount(): Int {
-        return messageList.size
-    }
-
-    // ViewHolder를 데이터와 연결할 때 호출되는 메서드.
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val currentMessage = messageList[position]
-        val ViewHolder = holder as SendViewHolder
+        if(holder.javaClass == SendViewHolder::class.java){
+            val viewHolder = holder as SendViewHolder
+            viewHolder.bind(currentMessage)
+        }
+        else{
+            val viewHolder = holder as ReceiveViewHolder
+            viewHolder.bind2(currentMessage)
+        }
     }
 
-    // View 담기?? -> 받는 쪽, 보내는 쪽 둘 다 있어야댐
-    class SendViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        val sendMessage: Text = itemView.findViewById(R.id.send_meassge)
+    // 아이템의 갯수 반환 ex) 주소록의 총 주소 개수
+    override fun getItemCount()=messageList.size
+
+    class SendViewHolder(private val binding: SendBinding) : RecyclerView.ViewHolder(binding.root){
+        fun bind(messageList: CMessageData){
+            binding.sendMeassge.text = messageList.message
+
+            binding.root.setOnClickListener{
+                Toast.makeText(binding.root.context,"눌림",
+                    Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
     }
 
+    class ReceiveViewHolder(private val binding: ReceiveBinding) : RecyclerView.ViewHolder(binding.root){
+        fun bind2(messagelist: CMessageData){
+            binding.receiveMeassge.text = messagelist.message
+
+            binding.root.setOnClickListener{
+                Toast.makeText(binding.root.context,"눌림",
+                    Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
 }
