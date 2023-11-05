@@ -14,11 +14,12 @@
         tools:layout_editor_absoluteY="1dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/topbar_cl"
             android:layout_width="match_parent"
             android:layout_height="60dp">
 
             <ImageButton
-                android:id="@+id/back_btn"
+                android:id="@+id/back_ib"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/btn_arrowback"
@@ -28,7 +29,7 @@
                 android:layout_marginBottom="10dp" />
 
             <TextView
-                android:id="@+id/nyangcnt_txt"
+                android:id="@+id/nyangcnt_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
