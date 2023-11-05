@@ -20,4 +20,10 @@ class NyangmalBoxActivity : AppCompatActivity() {
             startActivity(nextintent)
         }
     }
+
+    //상태변화에 따라 달라지는 작업은 여기서 해야하나??? 숫자 카운트되는거
+    //편지 쌓이는 것은 어디에서 작업하지?
+    override fun onResume() {
+        super.onResume()
+    }
 }
