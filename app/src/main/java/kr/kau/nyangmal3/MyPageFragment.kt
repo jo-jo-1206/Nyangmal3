@@ -2,6 +2,7 @@ package kr.kau.nyangmal3
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -27,6 +28,11 @@ class MyPageFragment : Fragment() {
             showEditOptionsDialog()
         }
 
+        binding.btnNyangMal.setOnClickListener {
+            val intent = Intent(activity, NyangmalBoxActivity::class.java)
+            startActivity(intent)
+        }
+
         return binding.root
     }
 
@@ -36,15 +42,6 @@ class MyPageFragment : Fragment() {
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogBinding.root)
             .create()
-
-        dialog.window?.let { window ->
-            val layoutParams = WindowManager.LayoutParams().apply {
-                copyFrom(window.attributes)
-                dimAmount = 0.75f
-            }
-
-            window.attributes = layoutParams
-        }
 
         dialogBinding.btnEditName.setOnClickListener {
             editName()
