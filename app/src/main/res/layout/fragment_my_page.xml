@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyPageFragment" >
+    tools:context=".MyPageFragment">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -30,7 +30,7 @@
             <Button
                 android:id="@+id/btn_Monologue"
                 android:layout_width="75dp"
-                android:layout_height="100dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
@@ -48,7 +48,7 @@
             <Button
                 android:id="@+id/btn_EditProfile"
                 android:layout_width="75dp"
-                android:layout_height="100dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
@@ -66,7 +66,7 @@
             <Button
                 android:id="@+id/btn_NyangMal"
                 android:layout_width="75dp"
-                android:layout_height="100dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
@@ -84,6 +84,25 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bordered_background"
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
+
+            <TextView
+                android:id="@+id/txt_userName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poor_story"
+                android:text="조성우"
+                android:textAlignment="center"
+                android:textSize="40sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/bordered_background"
             android:orientation="horizontal">
@@ -92,7 +111,6 @@
                 android:id="@+id/img_MyProfilePic"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/testprofilepic" />
         </LinearLayout>

@@ -11,7 +11,7 @@ class FriendListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+        // Inflate the layout for this fragmentz
         return inflater.inflate(R.layout.fragment_friend_list, container, false)
     }
 }
