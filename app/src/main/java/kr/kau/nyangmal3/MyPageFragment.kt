@@ -40,7 +40,7 @@ class MyPageFragment : Fragment() {
         dialog.window?.let { window ->
             val layoutParams = WindowManager.LayoutParams().apply {
                 copyFrom(window.attributes)
-                dimAmount = 0.5f
+                dimAmount = 0.75f
             }
 
             window.attributes = layoutParams
