@@ -56,7 +56,7 @@ class ChatActivity : AppCompatActivity() {
         }
 
         // 파이어베이스에서 데이터 가져오기
-        chatRef.child("sendRoom").child("message")
+        chatRef.child(sendRoom).child("message")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     messgeList.clear()
