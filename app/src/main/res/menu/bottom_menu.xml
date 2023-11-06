@@ -17,7 +17,7 @@
         android:id="@+id/nyang"
         android:enabled="true"
         android:icon="@drawable/ic_nyang"
-        android:title="냥"
+        android:title="눈송이"
         app:showAsAction="always"/>
     <item
         android:id="@+id/settings"

@@ -2,10 +2,7 @@ package kr.kau.nyangmal3
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.FrameLayout
-import android.widget.MediaController
 import androidx.fragment.app.Fragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import kr.kau.nyangmal3.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {
@@ -24,7 +21,7 @@ class HomeActivity : AppCompatActivity() {
             when(item.itemId) {
                 R.id.myPage -> switchFragment(MyPageFragment())
                 R.id.friends -> switchFragment(FriendListFragment())
-                R.id.nyang -> switchFragment(NyangFragment())
+                R.id.nyang -> switchFragment(SnowFragment())
                 R.id.settings -> switchFragment(SettingsFragment())
             }
             true

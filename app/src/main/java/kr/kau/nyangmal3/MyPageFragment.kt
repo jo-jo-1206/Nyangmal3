@@ -1,6 +1,7 @@
 package kr.kau.nyangmal3
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -9,10 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import kr.kau.nyangmal3.databinding.DialogEditmynameBinding
 import kr.kau.nyangmal3.databinding.DialogEditprofileBinding
 import kr.kau.nyangmal3.databinding.FragmentMyPageBinding
 
 class MyPageFragment : Fragment() {
+    private var userName: String = "조성우"
 
     private var _binding: FragmentMyPageBinding ?= null
     private val binding get() = _binding!!
@@ -57,9 +60,23 @@ class MyPageFragment : Fragment() {
     }
 
     private fun editName() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("이름 편집창").setMessage("이름을 편집합니다")
-        builder.create().show()
+        val dialogBinding = DialogEditmynameBinding.inflate(layoutInflater)
+        
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogBinding.root)
+            .create()
+        
+        // 확인 버튼을 눌렀을 때
+        dialogBinding.btnConfirm.setOnClickListener {
+            // 사용자가 입력한 새로운 이름을 가져옴
+            val newName = dialogBinding.txtEditNameField.text.toString()
+
+            binding.txtUserName.setText(newName)
+
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     private fun editPicture() {

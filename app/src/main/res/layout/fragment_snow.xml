@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NyangFragment">
+    tools:context=".SnowFragment">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="냥fragment"
-        android:textSize="40sp"/>
+        android:text="눈송이Fragment"
+        android:textSize="40sp" />
 
 </FrameLayout>
