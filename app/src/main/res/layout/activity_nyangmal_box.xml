@@ -28,7 +28,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginBottom="10dp" />
 
-            
+
             <TextView
                 android:id="@+id/nyangcnt_tv"
                 android:layout_width="wrap_content"
