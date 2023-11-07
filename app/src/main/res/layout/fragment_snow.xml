@@ -15,6 +15,11 @@
             layout="@layout/snow_story"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+        <include
+            android:id="@+id/story2"
+            layout="@layout/snow_story"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
 </FrameLayout>
