@@ -38,7 +38,7 @@ class CMessageAdapter(private val context: android.content.Context,private val m
 
     class SendViewHolder(private val binding: SendBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(messageList: CMessageData){
-            binding.sendMeassge.text = messageList.message
+            binding.sendMessage.text = messageList.message
 
             binding.root.setOnClickListener{
                 Toast.makeText(binding.root.context,"눌림",
