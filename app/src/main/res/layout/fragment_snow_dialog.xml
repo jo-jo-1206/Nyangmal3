@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    tools:context=".SnowDialogFragment" >
+    android:orientation="vertical" >
 
     <Button
         android:id="@+id/snowpic_b"
@@ -15,15 +14,32 @@
         android:backgroundTint="@color/black"
         android:layout_marginTop="6dp"
         android:layout_marginBottom="6dp"/>
-    <EditText
-        android:id="@+id/snowtext_et"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginEnd="6dp"
-        android:hint="사진 설명"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/snowtext_et"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="6dp"
+            android:hint="사진 설명"/>
+
+        <Button
+            android:id="@+id/snowtext_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="설명 추가"
+            android:layout_gravity="center"
+            android:layout_marginStart="20dp"
+            android:backgroundTint="@color/black"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="6dp"/>
+    </LinearLayout>
+
 
 </LinearLayout>
