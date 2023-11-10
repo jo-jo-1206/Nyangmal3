@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bordered_background"
+    android:gravity="center"
+    android:minWidth="0dp"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/txt_friendName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/poor_story"
+        android:gravity="center"
+        android:text="친구와..."
+        android:textAlignment="textStart"
+        android:textSize="30sp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+    <Button
+        android:id="@+id/btn_talk"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#000000"
+        android:fontFamily="@font/poor_story"
+        android:text="대화하기"
+        android:textSize="30sp"
+        app:cornerRadius="50dp" />
+
+    <Button
+        android:id="@+id/btn_sendNyangmal"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#000000"
+        android:fontFamily="@font/poor_story"
+        android:text="냥말 보내기"
+        android:textSize="30sp"
+        app:cornerRadius="50dp" />
+</LinearLayout>
