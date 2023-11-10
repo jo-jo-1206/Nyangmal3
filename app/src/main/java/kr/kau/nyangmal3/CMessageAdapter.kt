@@ -11,8 +11,13 @@ import kr.kau.nyangmal3.databinding.ReceiveBinding
 import kr.kau.nyangmal3.databinding.SendBinding
 import org.w3c.dom.Text
 
-class CMessageAdapter(private val context: android.content.Context,private val messageList:ArrayList<CMessageData>):
+class CMessageAdapter(private val context: android.content.Context,):
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private var messageList = mutableListOf<CMessageData>()
+    fun setListData(data: MutableList<CMessageData>){
+        messageList = data
+    }
 
     // recylerview가 viewholder를 새로만들어야 할 때마다 메소드 호출
     // 뷰홀더와 뷰를 생성하고 초기화
@@ -39,24 +44,12 @@ class CMessageAdapter(private val context: android.content.Context,private val m
     class SendViewHolder(private val binding: SendBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(messageList: CMessageData){
             binding.sendMessage.text = messageList.message
-
-            binding.root.setOnClickListener{
-                Toast.makeText(binding.root.context,"눌림",
-                    Toast.LENGTH_SHORT)
-                    .show()
-            }
         }
     }
 
     class ReceiveViewHolder(private val binding: ReceiveBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind2(messagelist: CMessageData){
             binding.receiveMeassge.text = messagelist.message
-
-            binding.root.setOnClickListener{
-                Toast.makeText(binding.root.context,"눌림",
-                    Toast.LENGTH_SHORT)
-                    .show()
-            }
         }
     }
 }
