@@ -1,5 +1,6 @@
 package kr.kau.nyangmal3
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,11 +11,13 @@ import androidx.appcompat.app.AlertDialog
 import kr.kau.nyangmal3.databinding.DialogEditmynameBinding
 import kr.kau.nyangmal3.databinding.FragmentSnowBinding
 import kr.kau.nyangmal3.databinding.FragmentSnowDialogBinding
+import kr.kau.nyangmal3.databinding.SnowStoryBinding
 
 //냥: 펑/스토리 ~24시간뒤면 사라짐. 한번읽으면사라짐?, 모든 사람들의 상태메시지모음화면느낌
 class SnowFragment : Fragment() {
 
     private var _binding: FragmentSnowBinding? = null
+    private var __binding: SnowStoryBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,6 +25,7 @@ class SnowFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentSnowBinding.inflate(inflater, container, false)
+        __binding = SnowStoryBinding.inflate(inflater,container,false)
 
         binding.addsnowIv.setOnClickListener {
             showDialog()
@@ -57,8 +61,8 @@ class SnowFragment : Fragment() {
             // 사용자가 입력한 새로운 이름을 가져옴
             val newName = dialogBinding.snowtextEt.text.toString()
 
-            binding.txtUserName.setText(newName)
 
+            __binding.textTv.setText(newName)
             dialog.dismiss()
         }
 
@@ -75,6 +79,16 @@ class SnowFragment : Fragment() {
         builder.create().show()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            when(requestCode) {
+                105 -> {
+                    var uri = data?.data
+                    __binding?.imageIv?.setImageURI(uri)
+                }
+            }
+        }
+    }
 
 
     override fun onDestroyView() {
