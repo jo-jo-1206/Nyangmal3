@@ -50,7 +50,6 @@ class FriendsAdapter(val friends: Array<Friend>) : RecyclerView.Adapter<FriendsA
 
             dialogBinding.txtFriendName.text = friend.name + "와..."
 
-
             dialog.setContentView(dialogBinding.root)
 
             dialogBinding.btnTalk.setOnClickListener {

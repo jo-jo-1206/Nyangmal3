@@ -2,25 +2,31 @@ package kr.kau.nyangmal3
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
+import kr.kau.nyangmal3.Repository.CUserInfoRepository
+import kr.kau.nyangmal3.ViewModel.UserInfoViewModel
 import kr.kau.nyangmal3.databinding.DialogEditmynameBinding
 import kr.kau.nyangmal3.databinding.DialogEditprofileBinding
 import kr.kau.nyangmal3.databinding.FragmentMyPageBinding
 
 class MyPageFragment : Fragment() {
-    private var userName: String = "조성우"
+    // private var userName: String = "조성우"
 
+    private val repository = CUserInfoRepository()
+    init {
+        repository
+    }
     private var _binding: FragmentMyPageBinding ?= null
     private val binding get() = _binding!!
+
+    val viewModel_userInfo : UserInfoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +45,14 @@ class MyPageFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel_userInfo.name.observe(viewLifecycleOwner) {
+            binding.txtUserName.text = viewModel_userInfo.name.value
+        }
     }
 
     private fun showEditOptionsDialog() {
