@@ -61,11 +61,9 @@ class SnowFragment : Fragment() {
             // 사용자가 입력한 새로운 이름을 가져옴
             val newName = dialogBinding.snowtextEt.text.toString()
 
-
-            __binding.textTv.setText(newName)
+            __binding?.textTv?.setText(newName)
             dialog.dismiss()
         }
-
         dialog.show()
     }
 
@@ -94,6 +92,7 @@ class SnowFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        __binding = null
     }
 
 }
