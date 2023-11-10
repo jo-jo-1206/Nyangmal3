@@ -1,5 +1,6 @@
 package kr.kau.nyangmal3
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -10,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.core.content.ContextCompat
 import kr.kau.nyangmal3.databinding.DialogEditmynameBinding
 import kr.kau.nyangmal3.databinding.DialogEditprofileBinding
 import kr.kau.nyangmal3.databinding.FragmentMyPageBinding
@@ -80,9 +82,26 @@ class MyPageFragment : Fragment() {
     }
 
     private fun editPicture() {
+        // 갤러리 어플 실행
+        val intent = Intent(Intent.ACTION_PICK) // 사용자가 데이터를 선택하고
+        intent.type = "image/*"
+        startActivityForResult(intent, 105)
+        // 질문 : startActivityForResult는 더이상 사용하지 않는 함수라고 하는데 이미지 접근 어케 하나요?
+
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("사진 편집창").setMessage("사진을 편집합니다")
         builder.create().show()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            when(requestCode) {
+                105 -> {
+                    var uri = data?.data
+                    binding.imgMyProfilePic.setImageURI(uri)
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

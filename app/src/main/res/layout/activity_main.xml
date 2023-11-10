@@ -21,6 +21,19 @@
             android:layout_height="353dp"
             app:srcCompat="@drawable/nyangmal_logo" />
 
+        <TextView
+            android:id="@+id/txt_CanUseCamera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poor_story"
+            android:text="카메라 사용 가능 상태"
+            android:textAlignment="center"
+            android:textSize="34sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="79dp"
@@ -61,5 +74,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
         </LinearLayout>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
