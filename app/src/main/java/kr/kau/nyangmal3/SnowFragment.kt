@@ -7,7 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.storage.FirebaseStorage
 import kr.kau.nyangmal3.databinding.DialogEditmynameBinding
 import kr.kau.nyangmal3.databinding.FragmentSnowBinding
 import kr.kau.nyangmal3.databinding.FragmentSnowDialogBinding
@@ -16,83 +19,121 @@ import kr.kau.nyangmal3.databinding.SnowStoryBinding
 //냥: 펑/스토리 ~24시간뒤면 사라짐. 한번읽으면사라짐?, 모든 사람들의 상태메시지모음화면느낌
 class SnowFragment : Fragment() {
 
-    private var _binding: FragmentSnowBinding? = null
-    private var __binding: SnowStoryBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentSnowBinding
+    private lateinit var snowAdapter: SnowAdapter // Assuming you have a custom adapter for your RecyclerView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        _binding = FragmentSnowBinding.inflate(inflater, container, false)
-        __binding = SnowStoryBinding.inflate(inflater,container,false)
-
-        binding.addsnowIv.setOnClickListener {
-            showDialog()
-        }
+        binding = FragmentSnowBinding.inflate(inflater,container,false)
         return binding.root
     }
 
-    private fun showDialog(){
-        val dialogBinding = FragmentSnowDialogBinding.inflate(layoutInflater)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val dialog = AlertDialog.Builder(requireContext()).setView(dialogBinding.root).create()
+        val snowItemList: List<SnowItem> = // Populate your list here
+        snowAdapter = SnowAdapter()
+        recycler_snow.layoutManager = LinearLayoutManager(requireContext())
+        recycler_snow.adapter = snowAdapter
 
-       dialogBinding.snowpicB.setOnClickListener {
-           editPicture()
-           dialog.dismiss()
-       }
-
-        dialogBinding.snowtextB.setOnClickListener {
-            editText()
-            dialog.dismiss()
+        binding.addsnowIv.setOnClickListener {
+            val dialog = SnowDialog()
+            dialog.show(requireActivity().supportFragmentManager, "SnowDialog")
         }
     }
-
-    private fun editText(){
-        val dialogBinding = FragmentSnowDialogBinding.inflate(layoutInflater)
-
-        val dialog = android.app.AlertDialog.Builder(requireContext())
-            .setView(dialogBinding.root)
-            .create()
-
-        // 확인 버튼을 눌렀을 때
-        dialogBinding.snowtextB.setOnClickListener {
-            // 사용자가 입력한 새로운 이름을 가져옴
-            val newName = dialogBinding.snowtextEt.text.toString()
-
-            __binding?.textTv?.setText(newName)
-            dialog.dismiss()
-        }
-        dialog.show()
-    }
-
-    private fun editPicture() {
-        // 갤러리 어플 실행
-        val intent = Intent(Intent.ACTION_PICK) // 사용자가 데이터를 선택하고
-        intent.type = "image/*"
-
-        val builder = android.app.AlertDialog.Builder(requireContext())
-        builder.setTitle("사진 편집창").setMessage("사진을 편집합니다")
-        builder.create().show()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK) {
-            when(requestCode) {
-                105 -> {
-                    var uri = data?.data
-                    __binding?.imageIv?.setImageURI(uri)
-                }
-            }
-        }
-    }
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-        __binding = null
-    }
+//    private val GALLERY_CODE = 10
+//    private lateinit var photo: ImageView
+//    private lateinit var storage: FirebaseStorage
+//    private lateinit var binding: FragmentSnowBinding
+//
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        binding = FragmentSnowBinding.inflate(inflater,container,false)
+//        binding
+//        return super.onCreateView(inflater, container, savedInstanceState)
+//    }
+    ////////////////////////////////////////
+//    private var _binding: FragmentSnowBinding? = null
+//    private var __binding: SnowStoryBinding? = null
+//    private val binding get() = _binding!!
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        // Inflate the layout for this fragment
+//        _binding = FragmentSnowBinding.inflate(inflater, container, false)
+//        __binding = SnowStoryBinding.inflate(inflater,container,false)
+//
+//        binding.addsnowIv.setOnClickListener {
+//            showDialog()
+//        }
+//        return binding.root
+//    }
+//
+//    private fun showDialog(){
+//        val dialogBinding = FragmentSnowDialogBinding.inflate(layoutInflater)
+//
+//        val dialog = AlertDialog.Builder(requireContext()).setView(dialogBinding.root).create()
+//
+//       dialogBinding.snowpicB.setOnClickListener {
+//           editPicture()
+//           dialog.dismiss()
+//       }
+//
+//        dialogBinding.snowtextB.setOnClickListener {
+//            editText()
+//            dialog.dismiss()
+//        }
+//    }
+//
+//    private fun editText(){
+//        val dialogBinding = FragmentSnowDialogBinding.inflate(layoutInflater)
+//
+//        val dialog = android.app.AlertDialog.Builder(requireContext())
+//            .setView(dialogBinding.root)
+//            .create()
+//
+//        // 확인 버튼을 눌렀을 때
+//        dialogBinding.snowtextB.setOnClickListener {
+//            // 사용자가 입력한 새로운 이름을 가져옴
+//            val newName = dialogBinding.snowtextEt.text.toString()
+//
+//            __binding?.textTv?.setText(newName)
+//            dialog.dismiss()
+//        }
+//        dialog.show()
+//    }
+//
+//    private fun editPicture() {
+//        // 갤러리 어플 실행
+//        val intent = Intent(Intent.ACTION_PICK) // 사용자가 데이터를 선택하고
+//        intent.type = "image/*"
+//
+//        val builder = android.app.AlertDialog.Builder(requireContext())
+//        builder.setTitle("사진 편집창").setMessage("사진을 편집합니다")
+//        builder.create().show()
+//    }
+//
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        if (resultCode == Activity.RESULT_OK) {
+//            when(requestCode) {
+//                105 -> {
+//                    var uri = data?.data
+//                    __binding?.imageIv?.setImageURI(uri)
+//                }
+//            }
+//        }
+//    }
+//
+//
+//    override fun onDestroyView() {
+//        super.onDestroyView()
+//        _binding = null
+//        __binding = null
+//    }
 
 }
