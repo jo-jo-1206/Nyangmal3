@@ -7,6 +7,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import kr.kau.nyangmal3.CMessageData
+import java.text.SimpleDateFormat
+import java.util.Date
 
 private lateinit var sendRoom: String
 private lateinit var receiveRoom: String
@@ -19,7 +21,7 @@ class CMessageRepository {
         sendRoom = "보낸사람 uid" + " 받는사람 uid"
         receiveRoom = "받는사람 uid" + " 보낸사람 uid"
 
-        chatRef.child(sendRoom).child("message")
+        chatRef.child(sendRoom)
             .addValueEventListener(object : ValueEventListener {
                 val listData: MutableList<CMessageData> = mutableListOf<CMessageData>()
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -42,11 +44,16 @@ class CMessageRepository {
 
     // 데이터베이스에 저장
     fun addMessage(message: CMessageData) {
-        chatRef.child(sendRoom).child("message").push()
-            .setValue(message).addOnSuccessListener { // 성공하면 받는 쪽에도 같이 저장해둠 - > 메세지 받아야되니까
-                chatRef.child(receiveRoom).child("message").push()
+        chatRef.child(sendRoom).push()
+            .setValue(message).addOnSuccessListener {
+                chatRef.child(receiveRoom).push()
                     .setValue(message)
             }
-
+//        chatRef.child(sendRoom).child("message").push()
+//            .setValue(message).addOnSuccessListener { // 성공하면 받는 쪽에도 같이 저장해둠 - > 메세지 받아야되니까
+//                chatRef.child(receiveRoom).child("message").push()
+//                    .setValue(message)
+//            }
     }
+
 }
