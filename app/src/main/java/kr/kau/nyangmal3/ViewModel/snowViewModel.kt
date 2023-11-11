@@ -15,26 +15,7 @@ class SnowViewModel : ViewModel() {
         repository.observeSnowData(_snowData)
     }
 
-    // Firebase에서 데이터를 가져오는 메서드 등을 구현
-    fun fetchData() {
-        repository.getSnowData().addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val snowItems = mutableListOf<SnowItem>()
-                for (dataSnapshot in snapshot.children) {
-                    val snowItem = dataSnapshot.getValue(SnowItem::class.java)
-                    snowItem?.let { snowItems.add(it) }
-                }
-                _snowData.value = snowItems
-            }
+    //is어쩌구
+    //set어쩌구
 
-            override fun onCancelled(error: DatabaseError) {
-                // 데이터 가져오기 실패 처리
-            }
-        })
-    }
 }
-
-
-//class snowViewModel : ViewModel(){
-//
-//}

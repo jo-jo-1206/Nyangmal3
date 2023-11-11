@@ -19,6 +19,7 @@ class SnowRepository {
     val snowRef = database.getReference("snow")
     val storage: FirebaseStorage = Firebase.storage
 
+    //firebase에서 데이터를 가져와 snowData라는 라이브데이터에 ㄱㄱ
     fun observeSnowData(snowData: MutableLiveData<List<SnowItem>>){
         snowRef.addValueEventListener(object : ValueEventListener { //여기로리슨되어서 내부처럼바뀜.
             override fun onDataChange(snapshot: DataSnapshot) {

@@ -39,26 +39,35 @@ class SnowFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // 뷰모델 초기화
-        viewModel = ViewModelProvider(this, SnowViewModelFactory(repository)).get(SnowViewModel::class.java)
+        //viewModel = ViewModelProvider(this, SnowViewModelFactory(repository)).get(SnowViewModel::class.java)
 
         // LiveData를 관찰하고 UI 업데이트
-        snowViewModel.snowData.observe(viewLifecycleOwner, Observer { snowData ->
-            // RecyclerView 등을 사용하여 데이터를 UI에 표시
-        })
+        viewModel.snowData.observe(viewLifecycleOwner){
+            /*binding?.snowpicB.
+            binding?.snowtextB
+            binding?.snowaddIb 여기는 후에 수정*/
+        }
+//        snowViewModel.snowData.observe(viewLifecycleOwner, Observer { snowData ->
+//            // RecyclerView 등을 사용하여 데이터를 UI에 표시
+//        })
 
         // 이미지 업로드 버튼 클릭 이벤트
-        binding.snowpicB.setOnClickListener {
+        binding?.snowpicB?.setOnClickListener {
             // 이미지 업로드 로직을 호출
             // 선택한 이미지를 Firebase에 업로드하고, 성공하면 텍스트 업로드 로직을 호출
         }
 
         // 텍스트 업로드 버튼 클릭 이벤트
-        binding.snowtextB.setOnClickListener {
+        binding?.snowtextB?.setOnClickListener {
             // 텍스트 업로드 로직을 호출
         }
 
         // 데이터 가져오기 및 RecyclerView 업데이트
-        snowViewModel.fetchData()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding=null
     }
 }
 
