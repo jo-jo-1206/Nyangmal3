@@ -20,7 +20,7 @@ class SnowRepository {
     val storage: FirebaseStorage = Firebase.storage
 
     //firebase에서 데이터를 가져와 snowData라는 라이브데이터에 ㄱㄱ
-    fun observeSnowData(snowData: MutableLiveData<List<SnowItem>>){
+    fun observeSnowData(snowData: MutableLiveData<List<SnowItem>>){ //챗은 뮤터블리스트임
         snowRef.addValueEventListener(object : ValueEventListener { //여기로리슨되어서 내부처럼바뀜.
             override fun onDataChange(snapshot: DataSnapshot) {
                 //이내용대로 snowData가바뀌길바람. 그럼 뷰가 뷰모델의라이브데이터를보고 자기도바꿈.
@@ -42,17 +42,18 @@ class SnowRepository {
         })
     }
 
-    fun uploadImage(imageUri: Uri): Task<Uri> {
-        // 이미지 업로드 로직을 구현
-    }
-
-    fun uploadText(text: String): Task<Void> {
-        // 텍스트 업로드 로직을 구현
-    }
-
-    fun getSnowData(): DatabaseReference {
-        // Firebase Realtime Database에서 데이터를 가져오는 로직을 구현
-    }
+    
+//    fun uploadImage(imageUri: Uri): Task<Uri> {
+//        // 이미지 업로드 로직을 구현
+//    }
+//
+//    fun uploadText(text: String): Task<Void> {
+//        // 텍스트 업로드 로직을 구현
+//    }
+//
+//    fun getSnowData(): DatabaseReference {
+//        // Firebase Realtime Database에서 데이터를 가져오는 로직을 구현
+//    }
 
 
 }
