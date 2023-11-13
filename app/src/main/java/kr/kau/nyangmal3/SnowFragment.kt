@@ -11,6 +11,67 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kr.kau.nyangmal3.databinding.FragmentSnowBinding
 import kr.kau.nyangmal3.viewmodel.SnowViewModel
 
+class SnowFragment : Fragment() {
+
+    var binding: FragmentSnowBinding? = null
+    private lateinit var adapter: SnowAdapter
+    private val viewModel: SnowViewModel by viewModels()
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentSnowBinding.inflate(layoutInflater)
+        return binding?.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        adapter = SnowAdapter()
+        binding?.recyclerSnows?.layoutManager = LinearLayoutManager(context)
+        binding?.recyclerSnows?.adapter = adapter
+
+        viewModel.snowData.observe(viewLifecycleOwner, Observer { snowData ->
+            adapter.setListData(snowData)
+            adapter.notifyDataSetChanged()
+        })
+
+        // 이미지 업로드 버튼 클릭 이벤트
+        binding?.snowimageIb?.setOnClickListener {
+            // 이미지 업로드 로직을 호출
+            // 선택한 이미지를 Firebase에 업로드하고, 성공하면 텍스트 업로드 로직을 호출
+        }
+
+        // 텍스트 업로드 버튼 클릭 이벤트
+        binding?.snowaddIb?.setOnClickListener {
+            // 텍스트 업로드 로직을 호출
+            val snowText = binding!!.snowtextEt.text.toString()
+            val snowData = SnowItem(snowText, snowText, 0, snowText) // 수정된 부분
+            viewModel.addSnow(snowData)
+            binding!!.snowtextEt.setText("") // 설명 전송하면 다시 텍스트 칸 초기화해주기
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+}
+
+/*package kr.kau.nyangmal3
+
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import kr.kau.nyangmal3.databinding.FragmentSnowBinding
+import kr.kau.nyangmal3.viewmodel.SnowViewModel
+
 //냥: 펑/스토리 ~24시간뒤면 사라짐. 한번읽으면사라짐?, 모든 사람들의 상태메시지모음화면느낌
 class SnowFragment() : Fragment() {
 
@@ -79,9 +140,9 @@ class SnowFragment() : Fragment() {
         super.onDestroyView()
         binding=null
     }
-}
+}*/
 
-
+//////////////////////////////////////////////////////////////////
 
 //class SnowFragment : Fragment() {
 //

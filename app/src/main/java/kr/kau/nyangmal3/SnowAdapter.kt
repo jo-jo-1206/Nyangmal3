@@ -1,4 +1,4 @@
-package kr.kau.nyangmal3
+/*package kr.kau.nyangmal3
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,7 +10,7 @@ class SnowAdapter : RecyclerView.Adapter<SnowAdapter.SnowViewHolder>() {
 
     private var snowList: MutableList<SnowItem> = mutableListOf()
 
-    fun setListData(data: MutableList<SnowItem>) {
+    fun setListData(data: List<SnowItem>) {
         snowList = data
     }
 
@@ -44,7 +44,57 @@ class SnowAdapter : RecyclerView.Adapter<SnowAdapter.SnowViewHolder>() {
     }
 
     override fun getItemCount() = snowList.size
+}*/
+package kr.kau.nyangmal3
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import kr.kau.nyangmal3.databinding.ItemSnowBinding
+import java.util.concurrent.TimeUnit
+
+class SnowAdapter : RecyclerView.Adapter<SnowAdapter.SnowViewHolder>() {
+
+    private var snowList: MutableList<SnowItem> = mutableListOf()
+
+    fun setListData(data: List<SnowItem>) {
+        snowList.clear()
+        snowList.addAll(data)
+        notifyDataSetChanged()
+    }
+
+    class SnowViewHolder(private val binding: ItemSnowBinding) : RecyclerView.ViewHolder(binding.root) {
+        val timestampTextView = binding.timestampTextView
+        val postTextView = binding.postTextView
+        val userNameTextView = binding.userNameTextView
+
+        fun bind(snowItem: SnowItem) {
+            userNameTextView.text = snowItem.userName
+            postTextView.text = snowItem.postText
+            timestampTextView.text = getElapsedTime(snowItem.timestamp)
+        }
+
+        private fun getElapsedTime(timestampInMillis: Long): String {
+            val elapsedMillis = System.currentTimeMillis() - timestampInMillis
+            val hours = TimeUnit.MILLISECONDS.toHours(elapsedMillis)
+            return "$hours hours ago"
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SnowViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ItemSnowBinding.inflate(inflater, parent, false)
+        return SnowViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: SnowViewHolder, position: Int) {
+        val currentItem = snowList[position]
+        holder.bind(currentItem)
+    }
+
+    override fun getItemCount() = snowList.size
 }
+
 
 /*package kr.kau.nyangmal3
 
