@@ -6,12 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import kr.kau.nyangmal3.databinding.FragmentSnowBinding
 import kr.kau.nyangmal3.viewmodel.SnowViewModel
 
 //냥: 펑/스토리 ~24시간뒤면 사라짐. 한번읽으면사라짐?, 모든 사람들의 상태메시지모음화면느낌
-class SnowFragment : Fragment() {
+class SnowFragment() : Fragment() {
 
     var binding: FragmentSnowBinding?=null
     private lateinit var adapter: SnowAdapter
@@ -28,30 +29,32 @@ class SnowFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = SnowAdapter(this)
-        binding.recyclerSnows.layoutManager = LinearLayoutManager(this) //쌓이는형태
-        binding.recyclerSnows.adapter = adapter
-        observerData()
+        adapter = SnowAdapter()
+        binding?.recyclerSnows?.layoutManager = LinearLayoutManager(context) //쌓이는형태
+        binding?.recyclerSnows?.adapter = adapter
+        //observerData()
         // 뷰모델 초기화
         //viewModel = ViewModelProvider(this, SnowViewModelFactory(repository)).get(SnowViewModel::class.java)
 
         // LiveData를 관찰하고 UI 업데이트
-        viewModel.snowData.observe(viewLifecycleOwner){
-            /*binding?.snowpicB.
-            binding?.snowtextB
-            binding?.snowaddIb 여기는 후에 수정*/
-        }
+//        viewModel.snowData.observe(viewLifecycleOwner){
+//            /*binding?.snowpicB.
+//            binding?.snowtextB
+//            binding?.snowaddIb 여기는 후에 수정*/
+//        }
 //        snowViewModel.snowData.observe(viewLifecycleOwner, Observer { snowData ->
 //            // RecyclerView 등을 사용하여 데이터를 UI에 표시
 //        })
         //이건챗에서 같은내용아래처럼햇는데 걍 ㄱㄱ
         fun observerData() {
-            viewModel.fetchData().observe(this, Observer {
+            viewModel.fetchData().observe(viewLifecycleOwner, Observer {
                 adapter.setListData(it)
                 adapter.notifyDataSetChanged()
             }
             )
         }
+
+        observerData()
 
         // 이미지 업로드 버튼 클릭 이벤트
         binding?.snowimageIb?.setOnClickListener {
@@ -64,7 +67,7 @@ class SnowFragment : Fragment() {
         binding?.snowaddIb?.setOnClickListener {
             // 텍스트 업로드 로직을 호출
             val snowText = binding!!.snowtextEt.text.toString()
-            val snowData = SnowItem(snowText)
+            val snowData = SnowItem(snowText, snowText, 0, snowText) //고쳐라
             viewModel.addSnow(snowData)
             binding!!.snowtextEt.setText("") //설명전송하면 다시 텍스트칸 초기화해주기
 
