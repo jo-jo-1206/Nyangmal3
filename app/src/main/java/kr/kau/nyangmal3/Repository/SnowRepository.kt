@@ -42,18 +42,18 @@ class SnowRepository {
         })
     }
 
-    
-//    fun uploadImage(imageUri: Uri): Task<Uri> {
-//        // 이미지 업로드 로직을 구현
-//    }
-//
-//    fun uploadText(text: String): Task<Void> {
-//        // 텍스트 업로드 로직을 구현
-//    }
-//
-//    fun getSnowData(): DatabaseReference {
-//        // Firebase Realtime Database에서 데이터를 가져오는 로직을 구현
-//    }
+    //데이터베이스에 저장
+    fun uploadImage(imageUri: Uri): Task<Uri> {
+        // 이미지 업로드 로직을 구현
+    }
+
+    fun uploadText(text: String): Task<Void> {
+        // 텍스트 업로드 로직을 구현
+    }
+
+    fun getSnowData(): DatabaseReference {
+        // Firebase Realtime Database에서 데이터를 가져오는 로직을 구현
+    }
 
 
 }

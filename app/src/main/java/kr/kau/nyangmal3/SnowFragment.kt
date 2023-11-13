@@ -1,31 +1,21 @@
 package kr.kau.nyangmal3
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import kr.kau.nyangmal3.databinding.DialogEditmynameBinding
 import kr.kau.nyangmal3.databinding.FragmentSnowBinding
-import kr.kau.nyangmal3.databinding.SnowStoryBinding
 import kr.kau.nyangmal3.viewmodel.SnowViewModel
 
 //냥: 펑/스토리 ~24시간뒤면 사라짐. 한번읽으면사라짐?, 모든 사람들의 상태메시지모음화면느낌
 class SnowFragment : Fragment() {
 
     var binding: FragmentSnowBinding?=null
-    val viewModel: SnowViewModel by activityViewModels()
+    private lateinit var adapter: SnowAdapter
+    val viewModel: SnowViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +28,10 @@ class SnowFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        adapter = SnowAdapter(this)
+        binding.recyclerSnows.layoutManager = LinearLayoutManager(this) //쌓이는형태
+        binding.recyclerSnows.adapter = adapter
+        observerData()
         // 뷰모델 초기화
         //viewModel = ViewModelProvider(this, SnowViewModelFactory(repository)).get(SnowViewModel::class.java)
 
@@ -50,21 +44,34 @@ class SnowFragment : Fragment() {
 //        snowViewModel.snowData.observe(viewLifecycleOwner, Observer { snowData ->
 //            // RecyclerView 등을 사용하여 데이터를 UI에 표시
 //        })
+        //이건챗에서 같은내용아래처럼햇는데 걍 ㄱㄱ
+        fun observerData() {
+            viewModel.fetchData().observe(this, Observer {
+                adapter.setListData(it)
+                adapter.notifyDataSetChanged()
+            }
+            )
+        }
 
         // 이미지 업로드 버튼 클릭 이벤트
-        binding?.snowpicB?.setOnClickListener {
+        binding?.snowimageIb?.setOnClickListener {
             // 이미지 업로드 로직을 호출
             // 선택한 이미지를 Firebase에 업로드하고, 성공하면 텍스트 업로드 로직을 호출
         }
 
         // 텍스트 업로드 버튼 클릭 이벤트
-        binding?.snowtextB?.setOnClickListener {
+        //전송버튼눌렀을때 텍스트도 업로드되면서 이미지 하...
+        binding?.snowaddIb?.setOnClickListener {
             // 텍스트 업로드 로직을 호출
+            val snowText = binding!!.snowtextEt.text.toString()
+            val snowData = SnowItem(snowText)
+            viewModel.addSnow(snowData)
+            binding!!.snowtextEt.setText("") //설명전송하면 다시 텍스트칸 초기화해주기
+
         }
 
         // 데이터 가져오기 및 RecyclerView 업데이트
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         binding=null
