@@ -11,6 +11,7 @@ data class SnowItem(
     // 다른 필요한 멤버 변수 및 생성자는 유지되어 있습니다.
 
     // Map 형태로 변환하는 함수
+    //Firebase Realtime Database에서는 데이터를 효율적으로 저장하기 위해 Map 형태로 변환하여 저장하는 것이 권장됩니다.
     fun toMap(): Map<String, Any?> {
         return mapOf(
             "userName" to userName,

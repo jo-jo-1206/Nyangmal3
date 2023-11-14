@@ -47,7 +47,7 @@ class SnowRepository {
         // 이미지 업로드 로직을 구현
     fun uploadImage(imageUri: Uri): Task<Uri> {
         val imageName = "${System.currentTimeMillis()}_image.jpg" // 이미지 파일명 생성
-        val imageRef = storage.reference.child("images/$imageName") // Firebase Storage 경로 지정
+        val imageRef = storage.reference.child("snow/$imageName") // Firebase Storage 경로 지정
 
         // 이미지를 Firebase Storage에 업로드
         return imageRef.putFile(imageUri)
@@ -68,14 +68,9 @@ class SnowRepository {
             snowRef.child(it).setValue(snowItem.toMap()) // SnowItem을 Map으로 변환하여 Firebase에 저장
         } ?: Tasks.forException(Exception("Snow key is null"))
     }
-
-
     fun getSnowData(): DatabaseReference {
         // Firebase Realtime Database에서 데이터를 가져오는 로직을 구현
         // Firebase Realtime Database에서 "snow" 데이터의 참조를 반환
         return snowRef
     }
-
-
-
 }
