@@ -1,6 +1,10 @@
 package kr.kau.nyangmal3
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,14 +12,23 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
 import kr.kau.nyangmal3.databinding.FragmentSnowBinding
 import kr.kau.nyangmal3.viewmodel.SnowViewModel
+
 
 class SnowFragment : Fragment() {
 
     var binding: FragmentSnowBinding? = null
     private lateinit var adapter: SnowAdapter
     private val viewModel: SnowViewModel by viewModels()
+
+    // 이미지 업로드를 위한 상수
+    private val GALLERY_CODE = 100
+    private lateinit var storageReference: StorageReference
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +54,10 @@ class SnowFragment : Fragment() {
         binding?.snowimageIb?.setOnClickListener {
             // 이미지 업로드 로직을 호출
             // 선택한 이미지를 Firebase에 업로드하고, 성공하면 텍스트 업로드 로직을 호출
+            // 이미지 선택을 위한 갤러리 인텐트 호출
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            startActivityForResult(intent, GALLERY_CODE)
         }
 
         // 텍스트 업로드 버튼 클릭 이벤트
@@ -52,7 +69,51 @@ class SnowFragment : Fragment() {
             binding!!.snowtextEt.setText("") // 설명 전송하면 다시 텍스트 칸 초기화해주기
         }
     }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
+        if (requestCode == GALLERY_CODE && resultCode == Activity.RESULT_OK) {
+            data?.data?.let { selectedImage ->
+                // 이미지를 Firebase에 업로드
+                uploadImageToFirebase(selectedImage)
+            }
+        }
+    }
+
+    // 이미지를 Firebase에 업로드
+        // 이미지를 Firebase Storage에 업로드하기 위한 코드
+        // storageReference를 사용하여 이미지를 업로드하고 성공 여부를 확인하세요.
+        // 성공하면 해당 이미지의 URL을 받아올 수 있습니다.
+
+    private fun uploadImageToFirebase(imageUri: Uri) {
+        // Firebase Storage에 업로드할 이미지의 저장소 경로 설정
+        val imageName = "snow/${System.currentTimeMillis()}_image.jpg"
+        val imageRef = storageReference.child(imageName)
+
+        // 이미지를 Firebase Storage에 업로드
+        val uploadTask = imageRef.putFile(imageUri)
+
+        // 업로드가 완료되면 실행될 콜백
+        uploadTask.addOnCompleteListener(OnCompleteListener<UploadTask.TaskSnapshot> { task ->
+            if (task.isSuccessful) {
+                // 이미지 업로드 성공
+                Log.d("Firebase", "Image upload successful")
+
+                // 업로드된 이미지의 다운로드 URL을 받아옴
+                imageRef.downloadUrl.addOnSuccessListener { downloadUri ->
+                    val imageUrl = downloadUri.toString()
+                    // TODO: 여기서 imageUrl을 사용하여 필요한 작업 수행
+                    Log.d("Firebase", "Image URL: $imageUrl")
+                }.addOnFailureListener { exception ->
+                    // 다운로드 URL 가져오기 실패
+                    Log.e("Firebase", "Failed to get download URL: $exception")
+                }
+            } else {
+                // 이미지 업로드 실패
+                Log.e("Firebase", "Image upload failed: ${task.exception}")
+            }
+        })
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null

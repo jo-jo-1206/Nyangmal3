@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kr.kau.nyangmal3.SnowItem
 import kr.kau.nyangmal3.repository.SnowRepository
+import kr.kau.nyangmal3.viewmodel.SnowViewModel
+
 
 class SnowViewModel : ViewModel() {
 

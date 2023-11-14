@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Firebase
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -43,21 +44,38 @@ class SnowRepository {
     }
 
     //데이터베이스에 저장
-    fun uploadImage(imageUri: Uri): Task<Uri> {
         // 이미지 업로드 로직을 구현
-        return TODO("Provide the return value")
+    fun uploadImage(imageUri: Uri): Task<Uri> {
+        val imageName = "${System.currentTimeMillis()}_image.jpg" // 이미지 파일명 생성
+        val imageRef = storage.reference.child("images/$imageName") // Firebase Storage 경로 지정
+
+        // 이미지를 Firebase Storage에 업로드
+        return imageRef.putFile(imageUri)
+            .continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let { throw it }
+                }
+                // 이미지 업로드가 성공하면 다운로드 URL을 반환
+                imageRef.downloadUrl
+            }
     }
 
-
+// 텍스트 업로드 로직을 구현
     fun uploadText(text: String): Task<Void> {
-        // 텍스트 업로드 로직을 구현
-        return TODO("Provide the return value")
+        val snowItem = SnowItem("user", text, System.currentTimeMillis(), "") // 사용자 및 기타 정보는 적절히 수정
+        val snowKey = snowRef.push().key // 새로운 데이터를 추가할 때의 키 생성
+        return snowKey?.let {
+            snowRef.child(it).setValue(snowItem.toMap()) // SnowItem을 Map으로 변환하여 Firebase에 저장
+        } ?: Tasks.forException(Exception("Snow key is null"))
     }
+
 
     fun getSnowData(): DatabaseReference {
         // Firebase Realtime Database에서 데이터를 가져오는 로직을 구현
-        return TODO("Provide the return value")
+        // Firebase Realtime Database에서 "snow" 데이터의 참조를 반환
+        return snowRef
     }
+
 
 
 }
