@@ -44,10 +44,11 @@ class ChatActivity : AppCompatActivity() {
 
         }
 
-        binding.button.setOnClickListener {
+        binding.backBtn.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
+
     }
     fun observerData() {
         viewModel.fetchData().observe(this, Observer {
