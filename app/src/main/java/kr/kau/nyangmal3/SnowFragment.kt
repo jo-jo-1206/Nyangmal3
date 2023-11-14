@@ -56,7 +56,7 @@ class SnowFragment : Fragment() {
             // 선택한 이미지를 Firebase에 업로드하고, 성공하면 텍스트 업로드 로직을 호출
             // 이미지 선택을 위한 갤러리 인텐트 호출
             val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
+            intent.type = "snow/*"
             startActivityForResult(intent, GALLERY_CODE)
         }
 
