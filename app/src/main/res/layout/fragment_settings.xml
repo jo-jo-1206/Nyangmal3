@@ -5,33 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".SettingsFragment" >
 
-    <LinearLayout
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+    </androidx.fragment.app.FragmentContainerView>
 
-        <Switch
-            android:id="@+id/settingFrag_vibrate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="진동알림" />
 
-        <Switch
-            android:id="@+id/settingFrag_darkmode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="다크모드" />
 
-        <CheckBox
-            android:id="@+id/checkBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="CheckBox" />
-
-        <Button
-            android:id="@+id/settingFrag_logout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="로그아웃" />
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

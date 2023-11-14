@@ -3,6 +3,8 @@ package kr.kau.nyangmal3
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import androidx.appcompat.app.AppCompatDelegate
 import kr.kau.nyangmal3.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
@@ -25,4 +27,5 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
+
 }

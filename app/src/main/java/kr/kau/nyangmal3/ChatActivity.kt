@@ -1,7 +1,9 @@
 package kr.kau.nyangmal3
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,7 +40,13 @@ class ChatActivity : AppCompatActivity() {
             viewModel.addMessage(messageData)
             // 메세지 전송 후 텍스트칸 초기화
             binding.edtMessage.setText("")
+            Log.d("chat", "chattinf test")
 
+        }
+
+        binding.button.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
     }
     fun observerData() {
@@ -48,4 +56,5 @@ class ChatActivity : AppCompatActivity() {
             binding.recyclerMessages.scrollToPosition(adapter.itemCount - 1)
         })
     }
+
 }
