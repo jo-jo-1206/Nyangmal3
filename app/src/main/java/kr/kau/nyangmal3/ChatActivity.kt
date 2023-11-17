@@ -1,7 +1,9 @@
 package kr.kau.nyangmal3
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +17,9 @@ import kr.kau.nyangmal3.databinding.ActivityChatBinding
 
 class ChatActivity : AppCompatActivity() {
     lateinit var binding: ActivityChatBinding
+
     private lateinit var adapter: CMessageAdapter
+    //val viewModel: CMessageViewModel by viewModels()
     val viewModel: CMessageViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,24 +33,28 @@ class ChatActivity : AppCompatActivity() {
         binding.recyclerMessages.adapter = adapter
         observerData()
 
-
         // 전송 버튼을 눌렀을 때
         binding.btnSubmit.setOnClickListener {
-            val messageText = binding.editText.text.toString()
-            val messageData = CMessageData(messageText)
+            val messageText = binding.edtMessage.text.toString()
+            val currentTime = viewModel.getTime()
+            val messageData = CMessageData(messageText,currentTime)
             viewModel.addMessage(messageData)
             // 메세지 전송 후 텍스트칸 초기화
-            binding.editText.setText("")
-
+            binding.edtMessage.setText("")
         }
 
+        binding.backBtn.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
 
     }
     fun observerData() {
         viewModel.fetchData().observe(this, Observer {
             adapter.setListData(it)
             adapter.notifyDataSetChanged()
-        }
-        )
+            binding.recyclerMessages.scrollToPosition(adapter.itemCount - 1)
+        })
     }
+
 }

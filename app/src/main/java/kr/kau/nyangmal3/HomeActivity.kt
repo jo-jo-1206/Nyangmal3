@@ -2,6 +2,7 @@ package kr.kau.nyangmal3
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import kr.kau.nyangmal3.databinding.ActivityHomeBinding
 
@@ -30,4 +31,5 @@ class HomeActivity : AppCompatActivity() {
     fun switchFragment(fragment: Fragment) { //그냥 메서드 만들기 너무 자주씀
         supportFragmentManager.beginTransaction().replace(R.id.containers, fragment).commit()
     }
+
 }

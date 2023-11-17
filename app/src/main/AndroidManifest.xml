@@ -24,13 +24,13 @@
             android:exported="true" />
         <activity
             android:name=".ChatActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".NyangmalBoxActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".HomeActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".LoginActivity"
             android:exported="true">

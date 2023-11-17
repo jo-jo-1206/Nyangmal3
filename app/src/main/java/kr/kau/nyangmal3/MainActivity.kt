@@ -4,7 +4,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.core.content.ContextCompat
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import kr.kau.nyangmal3.databinding.ActivityMainBinding
 
 var gCanUseCamera: Boolean = false
@@ -37,6 +38,5 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, ChatActivity::class.java)
             startActivity(intent)
         }
-
     }
 }

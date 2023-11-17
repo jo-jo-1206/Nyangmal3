@@ -51,4 +51,5 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
     }
+
 }
