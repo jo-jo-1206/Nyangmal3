@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.TimeZone
 
-
+//ui에서 발생한 데이터를 레포지토리에 넘겨?
 class SnowViewModel: ViewModel() {
     private val repository: SnowRepository = SnowRepository()
 
@@ -30,8 +30,13 @@ class SnowViewModel: ViewModel() {
 //        _snowData.value = mutableData.value as ArrayList<SnowItem>?
 //        return mutableData
 //    }
-    fun fetchData() {
-        repository.observeSnowData(_snowData)
+    // 차라리 이렇게 _snowData 직접바뀌게해라
+    fun fetchData(): LiveData<MutableList<SnowItem>> {
+        val mutableData = MutableLiveData<MutableList<SnowItem>>()
+        repository.observeSnowData().observeForever {
+            mutableData.value = it
+        }
+        return mutableData
     }
 
 
@@ -66,7 +71,7 @@ class SnowViewModel: ViewModel() {
     fun addSnow(data: SnowItem){
         // 여기에서 이미지 및 텍스트 업로드 메서드를 호출하여 Firebase에 데이터를 추가
         //레파지토리를 이용해 데이터베이스에 값을 저장
-        repository.uploadText(data.postText)
+        repository.uploadText(data)
         repository.uploadImage(Uri.parse(data.imageUrl)) // 이미지 업로드 호출, imageUrl을 Uri로 변환하여 전달
     }
 

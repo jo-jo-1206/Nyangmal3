@@ -109,12 +109,12 @@ class SnowFragment : Fragment() {
             binding!!.snowtextEt.setText("") // 설명 전송하면 다시 텍스트 칸 초기화해주기
         }
          //이미지 업로드 버튼 클릭 이벤트
-        binding?.snowimageIb?.setOnClickListener {
-            // 이미지 업로드 로직을 호출
-            // 선택한 이미지를 Firebase에 업로드하고, 성공하면 텍스트 업로드 로직을 호출
-            // 이미지 선택을 위한 갤러리 인텐트 호출
-
-        }
+//        binding?.snowimageIb?.setOnClickListener {
+//            // 이미지 업로드 로직을 호출
+//            // 선택한 이미지를 Firebase에 업로드하고, 성공하면 텍스트 업로드 로직을 호출
+//            // 이미지 선택을 위한 갤러리 인텐트 호출
+//
+//        }
     }
 
     override fun onDestroyView() {
