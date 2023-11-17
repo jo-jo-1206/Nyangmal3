@@ -10,8 +10,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.storage
 import kotlinx.coroutines.selects.select
 import kr.kau.nyangmal3.CMessageData
 import java.text.SimpleDateFormat
@@ -19,7 +17,7 @@ import java.util.Date
 
 private lateinit var sendRoom: String
 private lateinit var receiveRoom: String
-private lateinit var store:FirebaseStorage
+
 
 val database = Firebase.database
 val chatRef = database.getReference("chat")
