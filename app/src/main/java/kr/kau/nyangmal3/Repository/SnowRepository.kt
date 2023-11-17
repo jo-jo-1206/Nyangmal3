@@ -104,9 +104,9 @@ class SnowRepository {
     }
      */
 
-    fun getSnowData(): DatabaseReference {
-        // Firebase Realtime Database에서 데이터를 가져오는 로직을 구현
-        // Firebase Realtime Database에서 "snow" 데이터의 참조를 반환
-        return snowRef
-    }
+//    fun getSnowData(): DatabaseReference {
+//        // Firebase Realtime Database에서 데이터를 가져오는 로직을 구현
+//        // Firebase Realtime Database에서 "snow" 데이터의 참조를 반환
+//        return snowRef
+//    }
 }
