@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kr.kau.nyangmal3.SnowItem
 import kr.kau.nyangmal3.repository.SnowRepository
-import kr.kau.nyangmal3.viewmodel.SnowViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.TimeZone
@@ -23,13 +22,17 @@ class SnowViewModel: ViewModel() {
         fetchData()
     }
 
-    fun fetchData(): LiveData<MutableList<SnowItem>>{
-        val mutableData = MutableLiveData<MutableList<SnowItem>>()
-        repository.observeSnowData(mutableData)
-        _snowData.value = mutableData.value as ArrayList<SnowItem>?
-        return mutableData
+    // 여기서 liveData반환하는데 외부에서 데이터 가져오고있잖음
+//    fun fetchData(): LiveData<MutableList<SnowItem>>{
+//        val mutableData = MutableLiveData<MutableList<SnowItem>>()
+//        repository.observeSnowData(mutableData) //얘호출하면서데이터업데이트되면그게 mutableData에만적용됨;
+    //_snowData에는 적용안됨
+//        _snowData.value = mutableData.value as ArrayList<SnowItem>?
+//        return mutableData
+//    }
+    fun fetchData() {
+        repository.observeSnowData(_snowData)
     }
-
 
 
     /*
