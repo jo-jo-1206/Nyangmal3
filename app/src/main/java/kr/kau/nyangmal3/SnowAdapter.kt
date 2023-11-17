@@ -10,20 +10,23 @@ import java.util.concurrent.TimeUnit
 //완벽함 ㄱㄱ
 //얘가 아이템뷰 객체들에게 바인딩해줘야함 아이템걍받아옴 전에만든데이터리스트를매개변수로받아와야함
 //어댑터라는 클래스의 상속을 받아야함  뷰홀더도넣어줘야함
-class SnowAdapter(private val context: SnowFragment) : RecyclerView.Adapter<SnowAdapter.SnowViewHolder>() {
+//private val context: SnowFragment 이렇게해도되어야맞음ㅇㅇ
+class SnowAdapter(private val context: android.content.Context?) : RecyclerView.Adapter<SnowAdapter.SnowViewHolder>() {
 
     private var snowList: MutableList<SnowItem> = mutableListOf()
-    fun setListData(data: MutableList<SnowItem>) {
+    //data: MutableList<SnowItem> 원래이래도되는게맞
+    fun setListData(data: List<SnowItem>) {
 //        snowList.clear()
 //        snowList.addAll(data)
 //        notifyDataSetChanged()
-        snowList = data
+        snowList = data as MutableList<SnowItem> //걍 data하고끝해도
     }
     // 뷰홀더를 생성해줄때 호출되는 함수-> 처음에 생성될떄 몇번호출하고맘.온바인드뷰홀더랑다르게.
     // 여기서 아이템 뷰객체를만든뒤에 재활ㅇ용할라고 뷰홀더에 던져줌.
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SnowViewHolder {
         //사용하고자하는아이템뷰객체만든뒤                그런데 이 매개변수들이 엉 그건 니가 찾아봐라
-        val binding: ItemSnowBinding = ItemSnowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        //val binding: ItemSnowBinding = ItemSnowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding: ItemSnowBinding = ItemSnowBinding.inflate(LayoutInflater.from(context),parent,false)
         //뷰홀더에 던져주기
         return  SnowViewHolder(binding)
     }
@@ -55,8 +58,8 @@ class SnowAdapter(private val context: SnowFragment) : RecyclerView.Adapter<Snow
                     .into(binding.postImageIv)*/
             }
         }
-        private fun getElapsedTime(timestampInMillis: String): String {
-            val elapsedMillis = System.currentTimeMillis() - timestampInMillis.toInt()
+        private fun getElapsedTime(timestampInMillis: Long): String {
+            val elapsedMillis = System.currentTimeMillis() - timestampInMillis
             val hours = TimeUnit.MILLISECONDS.toHours(elapsedMillis)
             return "$hours hours ago"
         }

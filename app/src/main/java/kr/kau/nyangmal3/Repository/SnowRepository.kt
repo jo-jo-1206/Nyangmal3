@@ -3,7 +3,6 @@ package kr.kau.nyangmal3.repository
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Firebase
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -12,8 +11,6 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.storage
-import kr.kau.nyangmal3.CMessageData
-import kr.kau.nyangmal3.Repository.chatRef
 import kr.kau.nyangmal3.SnowItem
 //챗이랑 다른점많은데 걍냅둬보자
 val database = Firebase.database
@@ -107,9 +104,9 @@ class SnowRepository {
     }
      */
 
-//    fun getSnowData(): DatabaseReference {
-//        // Firebase Realtime Database에서 데이터를 가져오는 로직을 구현
-//        // Firebase Realtime Database에서 "snow" 데이터의 참조를 반환
-//        return snowRef
-//    }
+    fun getSnowData(): DatabaseReference {
+        // Firebase Realtime Database에서 데이터를 가져오는 로직을 구현
+        // Firebase Realtime Database에서 "snow" 데이터의 참조를 반환
+        return snowRef
+    }
 }
