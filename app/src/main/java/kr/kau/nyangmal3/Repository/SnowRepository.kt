@@ -92,8 +92,9 @@ class SnowRepository {
 
     // 텍스트 데이터베이스에 업로드
     fun uploadText(text: SnowItem){
-        var snowKey: String = "post"
-        snowRef.child(snowKey).push().setValue(text)
+//        var snowKey: String = "post"
+//        snowRef.child(snowKey).push().setValue(text)
+        snowRef.push().setValue(text)
 
     }
     /*
@@ -106,9 +107,9 @@ class SnowRepository {
     }
      */
 
-    fun getSnowData(): DatabaseReference {
-        // Firebase Realtime Database에서 데이터를 가져오는 로직을 구현
-        // Firebase Realtime Database에서 "snow" 데이터의 참조를 반환
-        return snowRef
-    }
+//    fun getSnowData(): DatabaseReference {
+//        // Firebase Realtime Database에서 데이터를 가져오는 로직을 구현
+//        // Firebase Realtime Database에서 "snow" 데이터의 참조를 반환
+//        return snowRef
+//    }
 }

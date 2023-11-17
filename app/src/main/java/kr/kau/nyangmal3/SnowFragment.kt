@@ -1,26 +1,26 @@
 package kr.kau.nyangmal3
 
 import android.app.Activity
-import android.content.Intent
-import android.net.Uri
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.UploadTask
 import kr.kau.nyangmal3.databinding.FragmentSnowBinding
 import kr.kau.nyangmal3.viewmodel.SnowViewModel
 
 class SnowFragment : Fragment() {
 
+    lateinit var snowActivity: Activity
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        snowActivity = context as Activity
+    }
     var binding: FragmentSnowBinding? = null
     //private lateinit var binding: FragmentSnowBinding
     private lateinit var adapter: SnowAdapter
@@ -28,8 +28,6 @@ class SnowFragment : Fragment() {
 //    private val viewModel: SnowViewModel by lazy {
 //        ViewModelProvider(this).get(SnowViewModel::class.java)
 //    }
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +48,10 @@ class SnowFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //어댑터와 데이터리스트 연결
-        adapter = SnowAdapter(context)
+        //근데 챗은 context자리에 this썼는데
+        //fragment는 context상속받지않아서 this쓸수없고,
+        // 우에서 그거 해줌 context상속받기
+        adapter = SnowAdapter(this)
         // 리사이클러뷰에 어댑터 연결 = 니가 사용해야할 어댑터는 이것이다. 라고 알려줌
         binding?.recyclerSnows?.adapter = adapter
         // 레이아웃 매니저 설정
@@ -67,7 +68,12 @@ class SnowFragment : Fragment() {
         // 값이 변경될때마다 내부코드가 실행됨
         // Observe는 라이브데이터변경감지하다갑 변경되면 snowData라는 파라미터 받음
         // 처음에 데이터 한개도없으면 실행안되어야 맞는데 observe가
-        viewModel.snowData.observe(viewLifecycleOwner, Observer { snowData ->
+        viewModel.fetchData().observe(viewLifecycleOwner, Observer {
+            adapter.setListData(it)
+            adapter.notifyDataSetChanged()
+            binding?.recyclerSnows?.scrollToPosition(adapter.itemCount - 1)
+        })
+        /*viewModel.snowData.observe(viewLifecycleOwner, Observer { snowData ->
             // 이러면 snowData가 널이 아닌경우에만 실행되어야 정상아님????
             snowData?.let {
                 // 어댑터에 snowData전달하고
@@ -78,6 +84,7 @@ class SnowFragment : Fragment() {
                 binding?.recyclerSnows?.scrollToPosition(adapter.itemCount - 1)
             }
         })
+         */
         /*
         viewModel.fetchData().observe(viewLifecycleOwner, Observer {
             adapter.setListData(it)
@@ -104,7 +111,8 @@ class SnowFragment : Fragment() {
         binding?.snowaddIb?.setOnClickListener {
             // 텍스트 업로드 로직을 호출
             val snowText = binding!!.snowtextEt.text.toString()
-            val snowData = SnowItem(snowText, snowText, 0, snowText)
+            val currentTime = viewModel.getTime()
+            val snowData = SnowItem("글쓴이", snowText, currentTime, "이미지Url")
             viewModel.addSnow(snowData)
             binding!!.snowtextEt.setText("") // 설명 전송하면 다시 텍스트 칸 초기화해주기
         }

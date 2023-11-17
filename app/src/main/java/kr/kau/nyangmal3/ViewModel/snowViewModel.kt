@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kr.kau.nyangmal3.SnowItem
 import kr.kau.nyangmal3.repository.SnowRepository
+
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.TimeZone
@@ -30,7 +31,6 @@ class SnowViewModel: ViewModel() {
 //        _snowData.value = mutableData.value as ArrayList<SnowItem>?
 //        return mutableData
 //    }
-    // 차라리 이렇게 _snowData 직접바뀌게해라
     fun fetchData(): LiveData<MutableList<SnowItem>> {
         val mutableData = MutableLiveData<MutableList<SnowItem>>()
         repository.observeSnowData().observeForever {
