@@ -11,12 +11,13 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.TimeZone
 
+
 class SnowViewModel: ViewModel() {
     private val repository: SnowRepository = SnowRepository()
 
-    //private val _snowData = MutableLiveData<ArrayList<SnowItem>>()
-    private val _snowData = MutableLiveData<List<SnowItem>>()
-    val snowData: LiveData<List<SnowItem>> get() = _snowData
+    private val _snowData = MutableLiveData<ArrayList<SnowItem>>()
+    //private val _snowData = MutableLiveData<List<SnowItem>>()
+    val snowData: LiveData<ArrayList<SnowItem>> get() = _snowData
 
     init {
         fetchData()
