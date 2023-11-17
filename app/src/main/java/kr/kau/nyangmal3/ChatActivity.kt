@@ -19,6 +19,7 @@ class ChatActivity : AppCompatActivity() {
     lateinit var binding: ActivityChatBinding
 
     private lateinit var adapter: CMessageAdapter
+    //val viewModel: CMessageViewModel by viewModels()
     val viewModel: CMessageViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,8 +41,6 @@ class ChatActivity : AppCompatActivity() {
             viewModel.addMessage(messageData)
             // 메세지 전송 후 텍스트칸 초기화
             binding.edtMessage.setText("")
-            Log.d("chat", "chattinf test")
-
         }
 
         binding.backBtn.setOnClickListener {

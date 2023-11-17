@@ -1,20 +1,30 @@
 package kr.kau.nyangmal3.Repository
 
+import android.content.Context
+import android.net.Uri
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.Firebase
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.storage
+import kotlinx.coroutines.selects.select
 import kr.kau.nyangmal3.CMessageData
 import java.text.SimpleDateFormat
 import java.util.Date
 
 private lateinit var sendRoom: String
 private lateinit var receiveRoom: String
+private lateinit var store:FirebaseStorage
 
 val database = Firebase.database
 val chatRef = database.getReference("chat")
+var selectImage: Uri?=null
+
 class CMessageRepository {
     fun observeMessage(): MutableLiveData<MutableList<CMessageData>> {
         val mutableData = MutableLiveData<MutableList<CMessageData>>()
@@ -55,5 +65,14 @@ class CMessageRepository {
 //                    .setValue(message)
 //            }
     }
+
+    // 파이어베이스 스토리지에 사진 저장하기
+//    fun addImage(){
+//        store = FirebaseStorage.getInstance()
+//        store.getReference("chat").child("Image")
+//            .putFile(selectImage!!).addOnSuccessListener {
+//                Log.d("uploadMessage","메세지 업로드 성공")
+//            }
+//    }
 
 }

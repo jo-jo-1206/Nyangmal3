@@ -69,7 +69,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_submit"
         app:layout_constraintHeight_percent="0.1"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/ImageBtn"
+        />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/divider_bottom"
@@ -81,6 +82,19 @@
         app:layout_constraintStart_toStartOf="parent">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageButton
+        android:id="@+id/ImageBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="Button"
+        android:src="@drawable/plusbutton"
+        app:backgroundTint="@android:color/transparent"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/edt_message"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/edt_message" />
 
     <ImageButton
         android:id="@+id/btn_submit"
@@ -115,4 +129,5 @@
         android:src="@drawable/chattingbackbutton"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="3dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
