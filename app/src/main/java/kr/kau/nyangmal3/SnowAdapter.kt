@@ -62,18 +62,21 @@ class SnowAdapter(private val context: Context?) : RecyclerView.Adapter<SnowAdap
 
     private var snowList: MutableList<SnowItem> = mutableListOf()
     fun setListData(data: List<SnowItem>) {
-//        snowList.clear()
-//        snowList.addAll(data)
-//        notifyDataSetChanged()
-        snowList = data as MutableList<SnowItem>
+        snowList.clear()
+        snowList.addAll(data)
+        notifyDataSetChanged()
+        // snowList = data as MutableList<SnowItem>
     }
     // 뷰홀더를 생성해줄때 호출되는 함수-> 처음에 생성될떄 몇번호출하고맘.온바인드뷰홀더랑다르게.
     // 여기서 아이템 뷰객체를만든뒤에 재활ㅇ용할라고 뷰홀더에 던져줌.
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SnowViewHolder {
-        //사용하고자하는아이템뷰객체만든뒤                그런데 이 매개변수들이 엉 그건 니가 찾아봐라
-        val binding: ItemSnowBinding = ItemSnowBinding.inflate(LayoutInflater.from(context), parent, false)
-        //뷰홀더에 던져주기
-        return  SnowViewHolder(binding)
+//        //사용하고자하는아이템뷰객체만든뒤                그런데 이 매개변수들이 엉 그건 니가 찾아봐라
+//        val binding: ItemSnowBinding = ItemSnowBinding.inflate(LayoutInflater.from(context), parent, false)
+//        //뷰홀더에 던져주기
+//        return  SnowViewHolder(binding)
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ItemSnowBinding.inflate(inflater, parent, false)
+        return SnowViewHolder(binding)
     }
 
     // 뷰홀더에 데이터를 바인딩해줘야 할때마다 호출되는 함수 => 사용자가화면위아래로스크롤할때마다 엄청나게 많이 호출

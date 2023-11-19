@@ -29,8 +29,6 @@ class SnowFragment : Fragment() {
 //        ViewModelProvider(this).get(SnowViewModel::class.java)
 //    }
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -46,9 +44,6 @@ class SnowFragment : Fragment() {
     }
 
     //LiveData옵저빙, adapter세팅은 여기서
-    /*
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -102,7 +97,7 @@ class SnowFragment : Fragment() {
             // 이미지 선택을 위한 갤러리 인텐트 호출
 
         }
-    }*/
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
