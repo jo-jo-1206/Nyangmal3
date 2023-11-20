@@ -1,54 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".SnowFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+
+    <EditText
+        android:id="@+id/snowtext_et"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/snowtext_et"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="6dp"
-                android:layout_marginStart="6dp"
-                android:layout_marginEnd="6dp"
-                android:hint="사진 설명"/>
-
-            <ImageButton
-                android:id="@+id/snowimage_ib"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/image_snow"
-                android:layout_marginStart="17dp"/>
-        </LinearLayout>
-        <ImageButton
-            android:id="@+id/snowadd_ib"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/btn_add"
-            android:layout_gravity="center"/>
-    </LinearLayout>
-
+        android:inputType="text"
+        android:layout_marginTop="6dp"
+        android:layout_marginStart="6dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:hint="사진 설명"/>
+    <ImageButton
+        android:id="@+id/snowimage_ib"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/image_snow"
+        app:layout_constraintStart_toEndOf="@id/snowtext_et"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="17dp"/>
+    <ImageButton
+        android:id="@+id/snowadd_ib"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/btn_add"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="150dp"
+        app:layout_constraintTop_toBottomOf="@id/snowimage_ib" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_snows"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp" />
-
-</LinearLayout>
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintTop_toBottomOf="@id/snowadd_ib"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
