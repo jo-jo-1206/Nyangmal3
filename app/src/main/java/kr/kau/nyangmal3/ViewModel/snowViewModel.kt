@@ -15,21 +15,11 @@ class SnowViewModel: ViewModel() {
     private val repository: SnowRepository = SnowRepository()
 
     private val _snowData = MutableLiveData<ArrayList<SnowItem>>()
-    //private val _snowData = MutableLiveData<List<SnowItem>>()
     val snowData: LiveData<ArrayList<SnowItem>> get() = _snowData
 
     init {
         fetchData()
     }
-
-    // 여기서 liveData반환하는데 외부에서 데이터 가져오고있잖음
-//    fun fetchData(): LiveData<MutableList<SnowItem>>{
-//        val mutableData = MutableLiveData<MutableList<SnowItem>>()
-//        repository.observeSnowData(mutableData) //얘호출하면서데이터업데이트되면그게 mutableData에만적용됨;
-    //_snowData에는 적용안됨
-//        _snowData.value = mutableData.value as ArrayList<SnowItem>?
-//        return mutableData
-//    }
 
     fun fetchData(): LiveData<MutableList<SnowItem>> {
         val mutableData = MutableLiveData<MutableList<SnowItem>>()
