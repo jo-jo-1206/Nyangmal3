@@ -7,28 +7,57 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import kr.kau.nyangmal3.databinding.FragmentFriendListBinding
 
 class FriendListFragment : Fragment() {
-    private var _binding: FragmentFriendListBinding ?= null
+    private lateinit var _binding: FragmentFriendListBinding
     private val binding get() = _binding!!
+    lateinit var friendsAdapter: FriendsAdapter
 
+    private lateinit var Auth: FirebaseAuth
+    private lateinit var dbRef: DatabaseReference
 
-    // TODO : db에서 받아온 친구 데이터로 바꾸기
-    val friends = arrayOf(
-        Friend("조소윤", eGender.FEMALE, "whthdbs1206@naver.com"),
-        Friend("조성우", eGender.MALE, "zzz11411@naver.com"),
-        Friend("윤지원", eGender.FEMALE, "dbswldnjs1206@naver.com")
-    )
+    private lateinit var friendList: ArrayList<User>
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentFriendListBinding.inflate(inflater, container, false)
-
         binding.recFriends.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        binding.recFriends.adapter = FriendsAdapter(friends)
+
+        Auth = Firebase.auth
+        dbRef = Firebase.database.reference
+
+        friendList = ArrayList()
+
+        friendsAdapter = FriendsAdapter(requireContext(), friendList)
+        binding.recFriends.adapter = friendsAdapter
+
+        dbRef.child("user").addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) { // 데이터가 변경될 때
+                for(postSnapshot in snapshot.children) {
+
+                    val currentUser = postSnapshot.getValue(User::class.java)
+
+                    // 본인 정보 제외
+                    if (Auth.currentUser?.uid != currentUser?.uID) {
+                        friendList.add(currentUser!!)
+                    }
+                }
+
+                friendsAdapter.notifyDataSetChanged() // 들어온 데이터가 실제 화면에 적용
+            }
+
+            override fun onCancelled(error: DatabaseError) { // 오류가 발생할 때 (실패 했을 때)
+            }
+        })
 
         return binding.root
     }
