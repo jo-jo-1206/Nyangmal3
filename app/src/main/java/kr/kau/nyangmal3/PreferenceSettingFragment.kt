@@ -1,6 +1,7 @@
 package kr.kau.nyangmal3
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
@@ -11,8 +12,12 @@ import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class PreferenceSettingFragment:PreferenceFragmentCompat {
+    lateinit var auth: FirebaseAuth
 
     constructor() : super()
 
@@ -20,9 +25,10 @@ class PreferenceSettingFragment:PreferenceFragmentCompat {
     var messagePreference: Preference? = null
     var dark_modePreference: Preference? = null
     var soundListPreference: Preference? = null
+    var logoutPreference: Preference? = null
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.setting, rootKey)
-
+        auth = Firebase.auth
         prefs = preferenceManager.sharedPreferences!!
 
         if (rootKey == null) {
@@ -30,12 +36,21 @@ class PreferenceSettingFragment:PreferenceFragmentCompat {
             messagePreference = findPreference("message")
             soundListPreference = findPreference("sound_list")
             dark_modePreference = findPreference("dark_mode")
+            logoutPreference = findPreference("logout")
 
             //prefs = requireActivity().getSharedPreferences("message", Context.MODE_PRIVATE)
 
             if (prefs.getString("sound_list", "") != "") {
                 // ListPreference의 summary를 sound_list key에 해당하는 값으로 설정
                 soundListPreference?.summary = prefs.getString("sound_list", "냥냥")
+            }
+
+            logoutPreference?.setOnPreferenceClickListener {
+                auth.signOut()
+                Toast.makeText(activity, "로그아웃됨", Toast.LENGTH_SHORT).show()
+                val intent = Intent(requireContext(),LoginActivity::class.java)
+                startActivity(intent)
+                true
             }
         }
 
@@ -65,8 +80,6 @@ class PreferenceSettingFragment:PreferenceFragmentCompat {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                         Toast.makeText(activity, "다크모드 해제", Toast.LENGTH_SHORT).show()
                         Log.d("ThemeChange", "Dark mode  not applied")
-
-
                     }
                 }
             }
