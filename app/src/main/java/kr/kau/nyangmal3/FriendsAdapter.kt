@@ -28,8 +28,8 @@ class FriendsAdapter(private val context: Context, private val friends: ArrayLis
         val nameText: TextView = binding.txtFriendName
         init {
             binding.imgFriendProfPic.setOnClickListener {
-                val friend = itemView.tag as User
-                showFriendActionDialog(friend)
+//                val friend = itemView.tag as User
+//                showFriendActionDialog(friend)
             }
         }
 
