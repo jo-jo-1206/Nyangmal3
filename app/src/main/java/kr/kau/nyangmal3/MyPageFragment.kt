@@ -10,6 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import kr.kau.nyangmal3.Repository.CUserInfoRepository
 import kr.kau.nyangmal3.ViewModel.UserInfoViewModel
 import kr.kau.nyangmal3.databinding.DialogEditmynameBinding
@@ -50,8 +56,23 @@ class MyPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel_userInfo.name.observe(viewLifecycleOwner) {
-            binding.txtUserName.text = viewModel_userInfo.name.value
+        val currentUser = Firebase.auth.currentUser
+        currentUser?.let {user ->
+            val uID = user.uid
+            val userRef = Firebase.database.reference.child("user").child(uID)
+
+            userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val userInfo = snapshot.getValue(User::class.java)
+                    binding.txtUserName.text = userInfo?.name
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
+
         }
     }
 
@@ -86,7 +107,6 @@ class MyPageFragment : Fragment() {
         dialogBinding.btnConfirm.setOnClickListener {
             // 사용자가 입력한 새로운 이름을 가져옴
             val newName = dialogBinding.txtEditNameField.text.toString()
-
             binding.txtUserName.setText(newName)
 
             dialog.dismiss()
