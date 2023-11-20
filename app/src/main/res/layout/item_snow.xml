@@ -5,21 +5,21 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/userName_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="글쓴이"
-        android:textSize="36sp"
-        android:textStyle="bold"
-        android:layout_marginTop="8dp"/>
+<!--    <TextView-->
+<!--        android:id="@+id/userName_tv"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="글쓴이"-->
+<!--        android:textSize="36sp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:layout_marginTop="8dp"/>-->
 
-    <ImageView
-        android:id="@+id/postImage_iv"
-        android:layout_width="350dp"
-        android:layout_height="350dp"
-        android:src="@drawable/image_snow"
-        android:layout_marginTop="8dp"/>
+<!--    <ImageView-->
+<!--        android:id="@+id/postImage_iv"-->
+<!--        android:layout_width="350dp"-->
+<!--        android:layout_height="350dp"-->
+<!--        android:src="@drawable/image_snow"-->
+<!--        android:layout_marginTop="8dp"/>-->
 
     <TextView
         android:id="@+id/postText_tv"
@@ -30,12 +30,12 @@
         android:layout_marginTop="4dp"
         android:layout_marginBottom="8dp"/>
 
-    <TextView
-        android:id="@+id/timestamp_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:text="시간"
-        android:layout_marginBottom="8dp"/>
+<!--    <TextView-->
+<!--        android:id="@+id/timestamp_tv"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:textSize="22sp"-->
+<!--        android:text="시간"-->
+<!--        android:layout_marginBottom="8dp"/>-->
 
 </LinearLayout>
