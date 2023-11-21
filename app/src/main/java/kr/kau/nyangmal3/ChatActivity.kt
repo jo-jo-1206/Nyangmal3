@@ -17,8 +17,10 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import kr.kau.nyangmal3.ViewModel.CMessageViewModel
 import kr.kau.nyangmal3.databinding.ActivityChatBinding
-private lateinit var recevierName:String
+// *** var ,val 구별하기
+
 private lateinit var reciverUid: String
+private val mauth: FirebaseAuth = FirebaseAuth.getInstance()
 
 class ChatActivity : AppCompatActivity() {
     lateinit var binding: ActivityChatBinding
@@ -26,23 +28,20 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var adapter: CMessageAdapter
     val viewModel: CMessageViewModel by viewModels()
 
-    private val mauth: FirebaseAuth = FirebaseAuth.getInstance()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 어댑터
         adapter = CMessageAdapter(this)
         binding.recyclerMessages.layoutManager = LinearLayoutManager(this)
         binding.recyclerMessages.adapter = adapter
         observerData()
 
         // recevierName = intent.getStringExtra("friend_name").toString() 친구이름 띄어줄 필요 없으니까
-
         // 프렌즈어댑터에서 친구의 uid를 받아와야함 그래야 채팅어댑터에서 보여줄 화면을 결정할 수 있음
-        reciverUid = intent.getStringExtra("uId").toString()
+        reciverUid = intent.getStringExtra("uid").toString()
 
         val senderUid: String? = mauth.currentUser?.uid
 
@@ -56,11 +55,11 @@ class ChatActivity : AppCompatActivity() {
             binding.edtMessage.setText("")
         }
 
+        // 뒤로가기 버튼
         binding.backBtn.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-
     }
 
     // 뷰 모델에서 채팅데이터 가져와서 어댑터에 보여줘라

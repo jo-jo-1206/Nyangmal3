@@ -38,12 +38,12 @@ class CMessageRepository {
                         if (snapshot.exists()) {
                             for (postSnapshat in snapshot.children) {
                                 val getData = postSnapshat.getValue(CMessageData::class.java)
+                                // 리스트에 메세지 넣기
                                 listData.add(getData!!)
                                 mutableData.value = listData
                             }
                         }
                     }
-
                     override fun onCancelled(error: DatabaseError) {
                     }
                 })
