@@ -1,6 +1,7 @@
 package kr.kau.nyangmal3.Repository
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
@@ -16,18 +17,29 @@ import kotlinx.coroutines.selects.select
 import kr.kau.nyangmal3.CMessageData
 import java.text.SimpleDateFormat
 import java.util.Date
-private lateinit var reciverUid: String
+
 class CMessageRepository {
 
     private val database = Firebase.database
     private val chatRef = database.getReference("chat")
     private val mauth: FirebaseAuth = FirebaseAuth.getInstance()
     private val senderUid: String? = mauth.currentUser?.uid
+    private var reciveUid: String? = null
+
+    fun setReciveUid(uid: String) {
+        reciveUid = uid
+    }
     fun observeMessage(): MutableLiveData<MutableList<CMessageData>> {
+        if (reciveUid == null) {
+            throw IllegalStateException("ReciveUid is not set. Call setReciveUid(uid) before calling observeMessage()")
+        }
+
         val mutableData = MutableLiveData<MutableList<CMessageData>>()
 
+
         senderUid?.let {
-            val sendRoom = it + "받는사람 uid"
+            //val sendRoom = "보내는 사람" + it + "받는사람" +reciveUid
+            val sendRoom = it + reciveUid
 
             chatRef.child(sendRoom)
                 .addValueEventListener(object : ValueEventListener {
@@ -51,12 +63,11 @@ class CMessageRepository {
         return mutableData
     }
 
-
     fun addMessage(message: CMessageData) {
 
         senderUid?.let {
-            val sendRoom = it + "받는사람 uid"
-            val receiveRoom = "받는사람 uid" + it
+            val sendRoom = it + reciveUid
+            val receiveRoom = reciveUid + it
 
             // 파이어베이스에 데이터 넣기
             chatRef.child(sendRoom).push()

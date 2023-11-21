@@ -17,6 +17,7 @@ import org.w3c.dom.Text
 class CMessageAdapter(private val context: android.content.Context):
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    //val myUid = FirebaseAuth.getInstance().currentUser?.uid.toString()
     private val send = 1
     private val receive = 2
 
@@ -28,12 +29,22 @@ class CMessageAdapter(private val context: android.content.Context):
     // recylerview가 viewholder를 새로만들어야 할 때마다 메소드 호출
     // 뷰홀더와 뷰를 생성하고 초기화
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if(viewType == send){// 받는 화면
-            val binding = SendBinding.inflate(LayoutInflater.from(context),parent,false)
-            return SendViewHolder(binding)
-        }else{
-            val binding = ReceiveBinding.inflate(LayoutInflater.from(context),parent,false)
-            return ReceiveViewHolder(binding)
+        // return if - else 문으로 할 떈 안됐는데 when()으로 하니깐 됨. 뭐지??
+        return when(viewType){
+            send ->{
+                val binding = SendBinding.inflate(LayoutInflater.from(context),parent,false)
+                Log.d("onCreate","send=1")
+                Log.d("onCreate", "$viewType")
+                SendViewHolder(binding)
+            }
+            receive -> {
+                val binding = ReceiveBinding.inflate(LayoutInflater.from(context),parent,false)
+                Log.d("onCreate","receive=2")
+                Log.d("onCreate", "$viewType")
+                ReceiveViewHolder(binding)
+            }
+
+            else -> {throw IllegalArgumentException("Invalid view type: $viewType")}
         }
     }
 
@@ -42,12 +53,15 @@ class CMessageAdapter(private val context: android.content.Context):
 
         if(holder.javaClass == SendViewHolder::class.java){ // 보내는 데이터
             val viewHolder = holder as SendViewHolder
+            Log.d("onBindViewHolder","sendView")
             viewHolder.sendBind(currentMessage)
         }
         else{ // 받는 데이터
             val viewHolder = holder as ReceiveViewHolder
+            Log.d("onBindViewHolder","receiveView")
             viewHolder.receiveBind(currentMessage)
         }
+
     }
 
     // 아이템의 갯수 반환 ex) 주소록의 총 주소 개수
@@ -56,12 +70,11 @@ class CMessageAdapter(private val context: android.content.Context):
     // 어떤 뷰홀더를 사용할 지 결정 함 -> 현재 접속자 아이디와 sendId가 같으면 sendViewHolder 사용
     override fun getItemViewType(position: Int): Int {
         val currentMessage = messageList[position]
-        return if(FirebaseAuth.getInstance().currentUser?.uid.equals(currentMessage.sendId)){
+        //return if(messageList[position].sendId.equals(myUid)){
+        return if(FirebaseAuth.getInstance().currentUser?.uid == currentMessage.sendId){
             send
-            Log.d("sendId","아이디가 서로 같음")
         }else{
             receive
-            Log.d("receiveId","아이디가 같지 않음")
         }
     }
 

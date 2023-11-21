@@ -20,6 +20,12 @@ class CMessageViewModel : ViewModel() {
 
     // 레파지토리에서 데이터 가져오기
     // 메세지를 리스트로
+
+
+    fun setReciveUid(uid: String) {
+        repository.setReciveUid(uid)
+    }
+
     fun fetchData(): LiveData<MutableList<CMessageData>> {
         val mutableData = MutableLiveData<MutableList<CMessageData>>()
         repository.observeMessage().observeForever {
