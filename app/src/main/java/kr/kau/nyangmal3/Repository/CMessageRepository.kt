@@ -28,9 +28,11 @@ class CMessageRepository {
 
         senderUid?.let {
             val sendRoom = it + "받는사람 uid"
+
             chatRef.child(sendRoom)
                 .addValueEventListener(object : ValueEventListener {
                     val listData: MutableList<CMessageData> = mutableListOf<CMessageData>()
+
                     override fun onDataChange(snapshot: DataSnapshot) {
                         listData.clear()
                         if (snapshot.exists()) {
@@ -49,12 +51,14 @@ class CMessageRepository {
         return mutableData
     }
 
-    // 데이터베이스에 저장
+
     fun addMessage(message: CMessageData) {
+
         senderUid?.let {
             val sendRoom = it + "받는사람 uid"
             val receiveRoom = "받는사람 uid" + it
 
+            // 파이어베이스에 데이터 넣기
             chatRef.child(sendRoom).push()
                 .setValue(message).addOnSuccessListener {
                     chatRef.child(receiveRoom).push()

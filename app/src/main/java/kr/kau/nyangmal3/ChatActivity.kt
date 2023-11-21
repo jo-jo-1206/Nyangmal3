@@ -18,6 +18,8 @@ import com.google.firebase.database.database
 import kr.kau.nyangmal3.ViewModel.CMessageViewModel
 import kr.kau.nyangmal3.databinding.ActivityChatBinding
 private lateinit var recevierName:String
+private lateinit var reciverUid: String
+
 class ChatActivity : AppCompatActivity() {
     lateinit var binding: ActivityChatBinding
 
@@ -25,7 +27,6 @@ class ChatActivity : AppCompatActivity() {
     val viewModel: CMessageViewModel by viewModels()
 
     private val mauth: FirebaseAuth = FirebaseAuth.getInstance()
-    private lateinit var reciverUid: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +39,10 @@ class ChatActivity : AppCompatActivity() {
         binding.recyclerMessages.adapter = adapter
         observerData()
 
-        recevierName = intent.getStringExtra("friend_name").toString()
-        supportActionBar?.title = recevierName
+        // recevierName = intent.getStringExtra("friend_name").toString() 친구이름 띄어줄 필요 없으니까
+
+        // 프렌즈어댑터에서 친구의 uid를 받아와야함 그래야 채팅어댑터에서 보여줄 화면을 결정할 수 있음
+        reciverUid = intent.getStringExtra("uId").toString()
 
         val senderUid: String? = mauth.currentUser?.uid
 
@@ -59,10 +62,13 @@ class ChatActivity : AppCompatActivity() {
         }
 
     }
+
+    // 뷰 모델에서 채팅데이터 가져와서 어댑터에 보여줘라
     fun observerData() {
         viewModel.fetchData().observe(this, Observer {
             adapter.setListData(it)
             adapter.notifyDataSetChanged()
+            // 채팅 칠 때 내가 친 채팅이 제일 아래로 가도록
             binding.recyclerMessages.scrollToPosition(adapter.itemCount - 1)
         })
     }
