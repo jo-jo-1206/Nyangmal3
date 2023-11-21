@@ -61,7 +61,7 @@ class MyPageFragment : Fragment() {
             val uID = user.uid
             val userRef = Firebase.database.reference.child("user").child(uID)
 
-            userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            userRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val userInfo = snapshot.getValue(User::class.java)
                     binding.txtUserName.text = userInfo?.name
