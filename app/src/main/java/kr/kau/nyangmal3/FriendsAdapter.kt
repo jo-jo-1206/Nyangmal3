@@ -19,19 +19,24 @@ class FriendsAdapter(private val context: Context, private val friends: ArrayLis
 
     override fun onBindViewHolder(holder: friendsViewHolder, position: Int) {
         val currentUser = friends[position]
-        holder.nameText.text = currentUser.name
+        holder.bind(currentUser)
     }
 
     override fun getItemCount(): Int = friends.size
 
     class friendsViewHolder(private val binding: ListFriendsBinding) : RecyclerView.ViewHolder(binding.root) {
+        private var currentFriend: User ?= null
+
         val nameText: TextView = binding.txtFriendName
-        init {
+
+        fun bind(friend: User) {
+            currentFriend = friend
+            binding.txtFriendName.text = friend.name
             binding.imgFriendProfPic.setOnClickListener {
 
                 val context = itemView.context
                 val intent = Intent(context, ChatActivity::class.java).apply {
-                    // putExtra("friend_name", friend.name)
+                    putExtra("uid", friend.uID)
                 }
 
                 context.startActivity(intent)
