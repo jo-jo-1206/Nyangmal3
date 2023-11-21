@@ -15,9 +15,11 @@ import java.util.TimeZone
 class CMessageViewModel : ViewModel() {
     // viewModle과 repostiroy를 연결
     private val repository = CMessageRepository()
-    private val _mutableData = MutableLiveData<ArrayList<CMessageData>>()
-    val message : LiveData<ArrayList<CMessageData>> get() = _mutableData
+    //private val _mutableData = MutableLiveData<ArrayList<CMessageData>>()
+    //val message : LiveData<ArrayList<CMessageData>> get() = _mutableData
 
+    // 레파지토리에서 데이터 가져오기
+    // 메세지를 리스트로
     fun fetchData(): LiveData<MutableList<CMessageData>> {
         val mutableData = MutableLiveData<MutableList<CMessageData>>()
         repository.observeMessage().observeForever {
@@ -31,6 +33,7 @@ class CMessageViewModel : ViewModel() {
         repository.addMessage(data)
     }
 
+    // 시간 가져오기
     fun getTime():String {
         val currentTime = System.currentTimeMillis()
         // 현재 시간을 Data 타입으로 변환
