@@ -9,7 +9,6 @@ import com.google.firebase.database.database
 import kr.kau.nyangmal3.SnowItem
 
 
-
 class SnowRepository {
     //firebase에서 데이터를 가져와  라이브데이터에 ㄱㄱ
     val database = Firebase.database

@@ -10,7 +10,7 @@ import kr.kau.nyangmal3.databinding.ItemSnowBinding
 //어댑터라는 클래스의 상속을 받아야함  뷰홀더도넣어줘야함
 class SnowAdapter(private val context: SnowFragment) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var snowList = mutableListOf<SnowItem>()
+    private var snowList = mutableListOf<SnowItem>() //
     fun setListData(data: MutableList<SnowItem>) {
 //        snowList.clear()
 //        snowList.addAll(data)

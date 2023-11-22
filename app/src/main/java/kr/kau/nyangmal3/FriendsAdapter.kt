@@ -24,6 +24,12 @@ class FriendsAdapter(private val context: Context, private val friends: ArrayLis
 
     override fun getItemCount(): Int = friends.size
 
+    fun updateFriendsList(friends: ArrayList<User>) {
+        this.friends.clear()
+        this.friends.addAll(friends)
+        notifyDataSetChanged()
+    }
+
     class friendsViewHolder(private val binding: ListFriendsBinding) : RecyclerView.ViewHolder(binding.root) {
         private var currentFriend: User ?= null
 

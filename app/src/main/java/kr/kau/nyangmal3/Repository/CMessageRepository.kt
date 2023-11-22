@@ -18,7 +18,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 private lateinit var reciverUid: String
 class CMessageRepository {
-
     private val database = Firebase.database
     private val chatRef = database.getReference("chat")
     private val mauth: FirebaseAuth = FirebaseAuth.getInstance()
