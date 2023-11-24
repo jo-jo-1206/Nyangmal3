@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kr.kau.nyangmal3.databinding.ItemSnowBinding
+import java.util.concurrent.TimeUnit
 
 
 //얘가 아이템뷰 객체들에게 바인딩해줘야함 아이템걍받아옴 전에만든데이터리스트를매개변수로받아와야함
@@ -15,7 +16,7 @@ class SnowAdapter(private val context: SnowFragment) : RecyclerView.Adapter<Recy
 //        snowList.clear()
 //        snowList.addAll(data)
 //        notifyDataSetChanged()
-        snowList = data //이렇게 하면 ui변경알림안줘서 제대로 업데이트안될수도. 위처럼 고치셈
+        snowList = data //이렇게 하면 ui변경알림안줘서 제대로 업데이트안될수도. 위처럼 고치셈 근데 어차피 프래그먼트에서 ㅇㅇ
     }
 
     // 뷰홀더를 생성해줄때 호출되는 함수-> 처음에 생성될떄 몇번호출하고맘.온바인드뷰홀더랑다르게.
@@ -48,8 +49,14 @@ class SnowAdapter(private val context: SnowFragment) : RecyclerView.Adapter<Recy
         fun bind(snowList: SnowItem?) {
             snowList?.let {
                 binding.postTextTv.text = it.postText
-                binding.timestampTv.text=getDateText(it.timestamp)
+                //binding.timestampTv.text=getDateText(it.timestamp)
+                binding.timestampTv.text= getElapsedTime(it.timestamp)
             }
+        }
+        fun getElapsedTime(timestampInMillis: Long): String {
+            val elapsedMillis = System.currentTimeMillis() - timestampInMillis
+            val hours = TimeUnit.MILLISECONDS.toHours(elapsedMillis)
+            return "$hours hours ago"
         }
         fun getDateText(sendData:String): String {
             var dateText =""

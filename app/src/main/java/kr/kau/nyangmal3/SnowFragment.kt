@@ -14,7 +14,7 @@ import kr.kau.nyangmal3.databinding.FragmentSnowBinding
 import kr.kau.nyangmal3.viewmodel.SnowViewModel
 
 class SnowFragment : Fragment() {
-    
+
     lateinit var snowActivity: Activity
 
     override fun onAttach(context: Context) {
@@ -71,7 +71,8 @@ class SnowFragment : Fragment() {
         //스노우애드 클릭하면 포스트 업데이트될것임.
         binding?.snowaddIb?.setOnClickListener {
             val snowText = binding!!.snowtextEt.text.toString()
-            val currentTime = viewModel.getTime()
+            //val currentTime = viewModel.getTime()
+            val currentTime = System.currentTimeMillis()
             //val snowData = SnowItem("글쓴이", snowText, 0, "이미지Url")
             val snowData = SnowItem(snowText, currentTime)
             viewModel.addSnow(snowData)
