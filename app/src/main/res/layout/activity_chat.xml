@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/background"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white">
+    android:layout_height="match_parent">
 
 
     <EditText
@@ -16,7 +15,6 @@
         android:hint="메시지 입력"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:textColor="@color/black"
         android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_submit"
@@ -42,7 +40,6 @@
         android:text="Button"
         android:src="@drawable/plusbutton"
         app:backgroundTint="@android:color/transparent"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/edt_message"
         app:layout_constraintStart_toStartOf="parent"

@@ -6,6 +6,11 @@
         android:summary="myid@naver.com">
     </Preference>
 
+    <Preference
+        android:key="logout"
+        android:title="로그아웃">
+    </Preference>
+
 
     <PreferenceCategory android:title="알림">
         <SwitchPreference
@@ -33,10 +38,5 @@
             android:key="dark_mode"
             android:title="다크모드" />
     </PreferenceCategory>
-
-    <Preference
-        android:key="logout"
-        android:title="로그아웃">
-    </Preference>
 
 </PreferenceScreen>
