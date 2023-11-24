@@ -51,6 +51,7 @@ class SnowFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val twentyFourHoursInMillis = 24 * 60 * 60 * 1000 // 24시간을 밀리초로 표현
+        //val twentyFourHoursInMillis = 1 * 60 * 60 * 1000
 
         // 무한 루프 실행 (백그라운드 스레드에서 실행하는 것이 좋습니다.)
         GlobalScope.launch(Dispatchers.Default) {
