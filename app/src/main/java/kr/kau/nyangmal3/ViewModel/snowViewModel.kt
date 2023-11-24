@@ -28,23 +28,18 @@ class SnowViewModel: ViewModel() {
         return mutableData
     }
 
-    fun addSnow(data: SnowItem){
+    fun addSnow(snowText: String, currentTime: Long){
         // 여기에서 이미지 및 텍스트 업로드 메서드를 호출하여 Firebase에 데이터를 추가
         //레파지토리를 이용해 데이터베이스에 값을 저장
-        repository.uploadText(data)
+        repository.uploadText(snowText, currentTime)
         //repository.uploadImage(Uri.parse(data.imageUrl)) // 이미지 업로드 호출, imageUrl을 Uri로 변환하여 전달
     }
 
-    fun getTime(): String {
-        val currentTime = System.currentTimeMillis()
-        // 현재 시간을 Data 타입으로 변환
-        val timeData = Date(currentTime)
 
-        val timeFormat = SimpleDateFormat("yyyyMMddHHmmss")
-        // 시간 맞춰주기
-        timeFormat.timeZone = TimeZone.getTimeZone("GMT+09:00")
-        return timeFormat.format(timeData).toString()
-
+    fun deleteSnow(snowItem: SnowItem) {
+        // snowItem을 삭제하는 코드를 작성해야 합니다.
+        // 예를 들어 Firebase Realtime Database에서 해당 데이터를 삭제하는 코드가 여기에 위치합니다.
+        repository.deleteData(snowItem)
     }
 
 

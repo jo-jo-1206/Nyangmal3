@@ -41,10 +41,30 @@ class SnowRepository {
     }
 
     // 텍스트 데이터베이스에 업로드
-    fun uploadText(text: SnowItem){
+    fun uploadText(snowText: String, currentTime: Long){
+
 //        var snowKey: String = "post" 따로 정해주고싶으면 이렇게 해도되고
 //        snowRef.child(snowKey).push().setValue(text)
-        snowRef.push().setValue(text)
+        val newItemRef = snowRef.push() // 새로운 데이터를 추가하고 반환된 참조를 newItemRef에 저장
+        val newItemKey = newItemRef.key // 추가된 데이터의 고유한 키를 가져옴
+
+        val text: SnowItem=SnowItem(newItemKey,snowText, currentTime)
+        // 키를 SnowItem 데이터 클래스에 저장
+        //text.key = newItemKey
+
+        // 이후 해당 키를 사용하여 데이터를 저장
+        newItemKey?.let { snowRef.child(it).setValue(text) }
+        //snowRef.push().setValue(text)
+    }
+
+    //firebase에서 데이터를 삭제
+    // snowItem을 삭제하는 코드를 작성해야 합니다.
+    // 예를 들어 Firebase Realtime Database에서 해당 데이터를 삭제하는 코드가 여기에 위치합니다.
+    fun deleteData(snowItem: SnowItem) {
+        val itemKey = snowItem.key // SnowItem에서 키를 가져옴
+        if (itemKey != null) {
+            snowRef.child(itemKey).removeValue() // 해당 키에 대한 데이터 삭제
+        }
     }
 }
 /*

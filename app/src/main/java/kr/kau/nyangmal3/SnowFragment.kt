@@ -10,6 +10,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kr.kau.nyangmal3.databinding.FragmentSnowBinding
 import kr.kau.nyangmal3.viewmodel.SnowViewModel
 
@@ -46,6 +50,32 @@ class SnowFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val twentyFourHoursInMillis = 24 * 60 * 60 * 1000 // 24시간을 밀리초로 표현
+
+        // 무한 루프 실행 (백그라운드 스레드에서 실행하는 것이 좋습니다.)
+        GlobalScope.launch(Dispatchers.Default) {
+            while (true) {
+                delay(60 * 60 * 1000) // 1시간마다 루프 실행 (필요에 따라 시간을 조정할 수 있습니다.)
+
+                val currentTime = System.currentTimeMillis()
+
+                // 데이터 가져오기
+                val snowItems = viewModel.fetchData().value
+
+                snowItems?.forEach { snowItem ->
+                    if (currentTime - snowItem.timestamp > twentyFourHoursInMillis) {
+                        // 삭제할 아이템의 위치 가져오기
+                        val positionToRemove = snowItems.indexOf(snowItem)
+                        //24시간이 지난 아이템 삭제 (ui에서 먼저 삭제하고 실제 데이터 삭제해야 좋을 것 같음)
+                        //positionToRemove는 삭제하려는 아이템의 위치(인덱스)
+                        adapter.removeItem(positionToRemove)
+                        // 24시간이 지난 데이터 삭제
+                        viewModel.deleteSnow(snowItem)
+                    }
+                }
+            }
+        }
+
         //어댑터와 데이터리스트 연결
         //근데 챗은 context자리에 this썼는데
         //fragment는 context상속받지않아서 this쓸수없고,
@@ -74,8 +104,8 @@ class SnowFragment : Fragment() {
             //val currentTime = viewModel.getTime()
             val currentTime = System.currentTimeMillis()
             //val snowData = SnowItem("글쓴이", snowText, 0, "이미지Url")
-            val snowData = SnowItem(snowText, currentTime)
-            viewModel.addSnow(snowData)
+            //val snowData = SnowItem(snowText, currentTime)
+            viewModel.addSnow(snowText, currentTime)
             binding!!.snowtextEt.setText("") // 설명 전송하면 다시 텍스트 칸 초기화해주기
         }
          //이미지 업로드 클릭하면 선택한이미지를 파이어베이스에 업로드하고 이미지선택을위해 갤러리 인텐트 호출해줘야함

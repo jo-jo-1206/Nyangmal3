@@ -79,6 +79,15 @@ class SnowAdapter(private val context: SnowFragment) : RecyclerView.Adapter<Recy
             return dateText
         }
     }
+
+    //뷰객체 삭제
+    fun removeItem(position: Int) {
+        if (position != RecyclerView.NO_POSITION) {
+            snowList.removeAt(position)
+            notifyItemRemoved(position)
+        }
+    }
+
 }
 /*
 class SnowAdapter(private val context: SnowFragment) : RecyclerView.Adapter<SnowAdapter.SnowViewHolder>() {
