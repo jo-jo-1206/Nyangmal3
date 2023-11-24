@@ -16,7 +16,9 @@
         android:linksClickable="true"
         android:padding="10dp"
         android:text="안녕하세요."
-        android:background="@drawable/chat_bubble"
+        android:textColor="@color/black"
+        android:background="@drawable/chat_bubble_receive"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,5 +33,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/receive_message"
         app:layout_constraintStart_toEndOf="@+id/receive_message"
         app:layout_constraintVertical_bias="0.8" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

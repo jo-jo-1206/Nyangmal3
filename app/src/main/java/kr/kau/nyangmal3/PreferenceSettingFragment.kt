@@ -14,22 +14,35 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class PreferenceSettingFragment:PreferenceFragmentCompat {
     lateinit var auth: FirebaseAuth
 
+    private lateinit var DbRef: DatabaseReference
+
     constructor() : super()
+    private val mauth: FirebaseAuth = FirebaseAuth.getInstance()
+    val currentUser: String? = mauth.currentUser?.uid
 
     lateinit var prefs: SharedPreferences
     var messagePreference: Preference? = null
     var dark_modePreference: Preference? = null
     var soundListPreference: Preference? = null
     var logoutPreference: Preference? = null
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+    var accountPreference: Preference? = null
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.setting, rootKey)
         auth = Firebase.auth
         prefs = preferenceManager.sharedPreferences!!
+
+
+
 
         if (rootKey == null) {
             // 객체 초기화
@@ -37,6 +50,7 @@ class PreferenceSettingFragment:PreferenceFragmentCompat {
             soundListPreference = findPreference("sound_list")
             dark_modePreference = findPreference("dark_mode")
             logoutPreference = findPreference("logout")
+            accountPreference = findPreference("account")
 
             //prefs = requireActivity().getSharedPreferences("message", Context.MODE_PRIVATE)
 
@@ -45,6 +59,7 @@ class PreferenceSettingFragment:PreferenceFragmentCompat {
                 soundListPreference?.summary = prefs.getString("sound_list", "냥냥")
             }
 
+            // 로그아웃 기능
             logoutPreference?.setOnPreferenceClickListener {
                 auth.signOut()
                 Toast.makeText(activity, "로그아웃됨", Toast.LENGTH_SHORT).show()
@@ -52,6 +67,20 @@ class PreferenceSettingFragment:PreferenceFragmentCompat {
                 startActivity(intent)
                 true
             }
+            DbRef= Firebase.database.reference // db 초기화
+
+            // 내 계정 가져오기
+            DbRef.child("user").child(currentUser!!).child("email")
+                .addValueEventListener(object: ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        accountPreference?.summary = snapshot.value.toString()
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+
+                })
         }
 
     }
@@ -72,15 +101,17 @@ class PreferenceSettingFragment:PreferenceFragmentCompat {
 
                 "dark_mode" -> {
                     val value = prefs.getBoolean("dark_mode", false)
+
                     if (value) {
-                        Toast.makeText(activity, "다크모드 성공", Toast.LENGTH_SHORT).show()
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                        Log.d("ThemeChange", "Dark mode applied")
+                        Toast.makeText(activity, "다크모드 성공", Toast.LENGTH_SHORT).show()
+
                     } else {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                         Toast.makeText(activity, "다크모드 해제", Toast.LENGTH_SHORT).show()
-                        Log.d("ThemeChange", "Dark mode  not applied")
+
                     }
+                    prefs.edit().putBoolean("dark_mode", value).apply()
                 }
             }
         }
