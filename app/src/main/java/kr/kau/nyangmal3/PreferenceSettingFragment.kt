@@ -69,7 +69,7 @@ class PreferenceSettingFragment:PreferenceFragmentCompat {
             }
             DbRef= Firebase.database.reference // db 초기화
 
-            // 내 계정
+            // 내 계정 가져오기
             DbRef.child("user").child(currentUser!!).child("email")
                 .addValueEventListener(object: ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
