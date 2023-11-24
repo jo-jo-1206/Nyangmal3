@@ -14,8 +14,7 @@ import kr.kau.nyangmal3.databinding.FragmentSnowBinding
 import kr.kau.nyangmal3.viewmodel.SnowViewModel
 
 class SnowFragment : Fragment() {
-
-
+    
     lateinit var snowActivity: Activity
 
     override fun onAttach(context: Context) {
