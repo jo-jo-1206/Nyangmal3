@@ -72,9 +72,9 @@ class SnowFragment : Fragment() {
         //스노우애드 클릭하면 포스트 업데이트될것임.
         binding?.snowaddIb?.setOnClickListener {
             val snowText = binding!!.snowtextEt.text.toString()
-            //val currentTime = viewModel.getTime()
+            val currentTime = viewModel.getTime()
             //val snowData = SnowItem("글쓴이", snowText, 0, "이미지Url")
-            val snowData = SnowItem(snowText)
+            val snowData = SnowItem(snowText, currentTime)
             viewModel.addSnow(snowData)
             binding!!.snowtextEt.setText("") // 설명 전송하면 다시 텍스트 칸 초기화해주기
         }

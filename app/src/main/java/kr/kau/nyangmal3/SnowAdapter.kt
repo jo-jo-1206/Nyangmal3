@@ -48,7 +48,28 @@ class SnowAdapter(private val context: SnowFragment) : RecyclerView.Adapter<Recy
         fun bind(snowList: SnowItem?) {
             snowList?.let {
                 binding.postTextTv.text = it.postText
+                binding.timestampTv.text=getDateText(it.timestamp)
             }
+        }
+        fun getDateText(sendData:String): String {
+            var dateText =""
+            var timeString = ""
+            if(sendData.isNotBlank()){
+                timeString = sendData.substring(8,12)
+                var hour = timeString.substring(0, 2)
+                var minute = timeString.substring(2, 4)
+
+                var timeformat = "%02d:%02d"
+
+                if (hour.toInt() > 11) {
+                    dateText += "오후 "
+                    dateText += timeformat.format(hour.toInt() - 12, minute.toInt())
+                } else {
+                    dateText += "오전 "
+                    dateText += timeformat.format(hour.toInt(), minute.toInt())
+                }
+            }
+            return dateText
         }
     }
 }
