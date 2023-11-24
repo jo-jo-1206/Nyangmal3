@@ -14,8 +14,7 @@ import kr.kau.nyangmal3.databinding.ReceiveBinding
 import kr.kau.nyangmal3.databinding.SendBinding
 import org.w3c.dom.Text
 
-class CMessageAdapter(private val context: android.content.Context):
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CMessageAdapter(private val context: android.content.Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     //val myUid = FirebaseAuth.getInstance().currentUser?.uid.toString()
     private val send = 1
@@ -33,17 +32,12 @@ class CMessageAdapter(private val context: android.content.Context):
         return when(viewType){
             send ->{
                 val binding = SendBinding.inflate(LayoutInflater.from(context),parent,false)
-                Log.d("onCreate","send=1")
-                Log.d("onCreate", "$viewType")
                 SendViewHolder(binding)
             }
             receive -> {
                 val binding = ReceiveBinding.inflate(LayoutInflater.from(context),parent,false)
-                Log.d("onCreate","receive=2")
-                Log.d("onCreate", "$viewType")
                 ReceiveViewHolder(binding)
             }
-
             else -> {throw IllegalArgumentException("Invalid view type: $viewType")}
         }
     }
@@ -53,12 +47,10 @@ class CMessageAdapter(private val context: android.content.Context):
 
         if(holder.javaClass == SendViewHolder::class.java){ // 보내는 데이터
             val viewHolder = holder as SendViewHolder
-            Log.d("onBindViewHolder","sendView")
             viewHolder.sendBind(currentMessage)
         }
         else{ // 받는 데이터
             val viewHolder = holder as ReceiveViewHolder
-            Log.d("onBindViewHolder","receiveView")
             viewHolder.receiveBind(currentMessage)
         }
 
@@ -70,7 +62,7 @@ class CMessageAdapter(private val context: android.content.Context):
     // 어떤 뷰홀더를 사용할 지 결정 함 -> 현재 접속자 아이디와 sendId가 같으면 sendViewHolder 사용
     override fun getItemViewType(position: Int): Int {
         val currentMessage = messageList[position]
-        //return if(messageList[position].sendId.equals(myUid)){
+        //return if(messageList[position].sendId.equals(myUid))
         return if(FirebaseAuth.getInstance().currentUser?.uid == currentMessage.sendId){
             send
         }else{
@@ -83,7 +75,7 @@ class CMessageAdapter(private val context: android.content.Context):
         fun sendBind(messageList: CMessageData?){
             messageList?.let {
                 binding.sendMessage.text = it.message
-                val sendData = it.send_time
+                val sendData = it.sendTime
                 val dateText = getDateText(sendData)
                 binding.txtDate.text = dateText
             }
@@ -117,9 +109,10 @@ class CMessageAdapter(private val context: android.content.Context):
         fun receiveBind(messageList: CMessageData?) {
             messageList?.let {
                 binding.receiveMessage.text = it.message
-                val sendData = it.send_time
+                val sendData = it.sendTime
                 val dateText = getDateText(sendData)
                 binding.txtDate.text = dateText
+
             }
         }
         fun getDateText(sendData:String): String {
@@ -142,7 +135,8 @@ class CMessageAdapter(private val context: android.content.Context):
             }
             return dateText
         }
+
     }
-    }
+}
 
 

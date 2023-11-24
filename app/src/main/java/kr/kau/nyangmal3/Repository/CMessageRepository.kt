@@ -25,6 +25,7 @@ class CMessageRepository {
     private val mauth: FirebaseAuth = FirebaseAuth.getInstance()
     private val senderUid: String? = mauth.currentUser?.uid
     private var reciveUid: String? = null
+    val peopleCount = 0
 
     fun setReciveUid(uid: String) {
         reciveUid = uid
@@ -35,8 +36,6 @@ class CMessageRepository {
         }
 
         val mutableData = MutableLiveData<MutableList<CMessageData>>()
-
-
         senderUid?.let {
             //val sendRoom = "보내는 사람" + it + "받는사람" +reciveUid
             val sendRoom = it + reciveUid
@@ -52,6 +51,7 @@ class CMessageRepository {
                                 val getData = postSnapshat.getValue(CMessageData::class.java)
                                 // 리스트에 메세지 넣기
                                 listData.add(getData!!)
+
                                 mutableData.value = listData
                             }
                         }
@@ -77,4 +77,5 @@ class CMessageRepository {
                 }
         }
     }
+
 }

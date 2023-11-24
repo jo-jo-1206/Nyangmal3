@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -21,6 +23,15 @@ class LoginActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
+        // 다크모드 설정값을 앱이 시작할때 계속 유지되도록 함
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val isDarkModeEnabled = prefs.getBoolean("dark_mode", false)
+        if (isDarkModeEnabled) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+
         binding.btnLogin.setOnClickListener {
             val email = binding.edtTxtEmail.text.toString()
             val password = binding.edtTxtPassword.text.toString()
@@ -33,7 +44,6 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-
 
     private fun login(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
