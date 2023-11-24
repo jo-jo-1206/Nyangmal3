@@ -19,8 +19,6 @@ import kr.kau.nyangmal3.Repository.CMessageRepository
 import kr.kau.nyangmal3.ViewModel.CMessageViewModel
 import kr.kau.nyangmal3.databinding.ActivityChatBinding
 // *** var ,val 구별하기
-
-
 private val mauth: FirebaseAuth = FirebaseAuth.getInstance()
 
 class ChatActivity : AppCompatActivity() {
