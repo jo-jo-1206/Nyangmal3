@@ -1,11 +1,12 @@
 package kr.kau.nyangmal3
 
 data class SnowItem(
+    val userName: String,
     var key: String? = null,
     val postText: String,
     val timestamp: Long
 ){
-    constructor():this("","",0)
+    constructor():this("","","",0)
 }
 //data class SnowItem(
 //    val userName: String,
