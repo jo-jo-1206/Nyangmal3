@@ -42,8 +42,6 @@ class PreferenceSettingFragment:PreferenceFragmentCompat {
         prefs = preferenceManager.sharedPreferences!!
 
 
-
-
         if (rootKey == null) {
             // 객체 초기화
             messagePreference = findPreference("message")
