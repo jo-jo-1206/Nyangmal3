@@ -42,7 +42,7 @@ android {
 }
 
 dependencies {
-
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
     implementation("com.google.firebase:firebase-bom:32.5.0")
     implementation("com.firebaseui:firebase-ui-storage:8.0.2")
     implementation("com.google.firebase:firebase-firestore-ktx:24.9.1")

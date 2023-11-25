@@ -22,10 +22,10 @@ class NyangmalAdapter(private val context: android.content.Context):
 
     // 뷰홀더에 데이터를 바인딩해줘야 할때마다 호출되는 함수 => 사용자가화면위아래로스크롤할때마다 엄청나게 많이 호출
     // 얘는 매개변수로 뷰홀더랑 포지션(리사이클러뷰에서는 인덱스아이디)이 들어오지?
-    // 따라서 받아온 뷰홀더에 바인딩을 해주기위해 앨범리스트에서 해당포지션인 데이터를 뷰홀더에 방금만든바인드에던져주기
+    // 따라서 받아온 뷰홀더에 바인딩을 해주기위해 리스트에서 해당포지션인 데이터를 뷰홀더에 방금만든바인드에던져주기
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val snowHolder = holder as NyangmalViewHolder
-        snowHolder.bind(nyangmalList[position])
+        val nyangHolder = holder as NyangmalViewHolder
+        nyangHolder.bind(nyangmalList[position])
     }
 
     // 아이템의 갯수 반환 ex) 주소록의 총 주소 개수

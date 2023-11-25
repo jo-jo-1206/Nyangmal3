@@ -56,8 +56,8 @@ class SnowFragment : Fragment() {
         // 무한 루프 실행 (백그라운드 스레드에서 실행하는 것이 좋습니다.)
         GlobalScope.launch(Dispatchers.Default) {
             while (true) {
-                delay(60 * 60 * 1000) // 1시간마다 루프 실행 (필요에 따라 시간을 조정할 수 있습니다.)
-
+                //delay(60 * 60 * 1000) // 1시간마다 루프 실행 (필요에 따라 시간을 조정할 수 있습니다.)
+                delay(60 * 1000)
                 val currentTime = System.currentTimeMillis()
 
                 // 데이터 가져오기
