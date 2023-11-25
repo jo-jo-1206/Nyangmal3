@@ -6,6 +6,8 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kr.kau.nyangmal3.databinding.ActivityNyangmalBoxBinding
 import kr.kau.nyangmal3.viewmodel.NyangmalViewModel
 
