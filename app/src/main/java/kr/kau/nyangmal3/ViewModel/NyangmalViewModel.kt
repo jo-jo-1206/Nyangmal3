@@ -9,12 +9,16 @@ import kr.kau.nyangmal3.Repository.NyangmalRepository
 class NyangmalViewModel: ViewModel() {
     private val repository: NyangmalRepository = NyangmalRepository()
 
-    private val _snowData = MutableLiveData<ArrayList<NyangmalItem>>()
-    val snowData: LiveData<ArrayList<NyangmalItem>> get() = _snowData
+    private val _nyangData = MutableLiveData<ArrayList<NyangmalItem>>()
+    val nyangData: LiveData<ArrayList<NyangmalItem>> get() = _nyangData
+
+    fun setReceiveUid(uid: String) {
+        repository.setReciveUid(uid)
+    }
 
     fun fetchData(): LiveData<MutableList<NyangmalItem>> {
         val mutableData = MutableLiveData<MutableList<NyangmalItem>>()
-        repository.observeSnowData().observeForever {
+        repository.observeNyangData().observeForever {
             mutableData.value = it
         }
         return mutableData
