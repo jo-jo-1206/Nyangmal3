@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kr.kau.nyangmal3.databinding.DialogFriendactionBinding
+import kr.kau.nyangmal3.databinding.DialogSendnyangmalBinding
 import kr.kau.nyangmal3.databinding.ListFriendsBinding
 
 class FriendsAdapter(private val context: Context, private val friends: ArrayList<User>)
@@ -39,13 +40,7 @@ class FriendsAdapter(private val context: Context, private val friends: ArrayLis
             currentFriend = friend
             binding.txtFriendName.text = friend.name
             binding.imgFriendProfPic.setOnClickListener {
-
-                val context = itemView.context
-                val intent = Intent(context, ChatActivity::class.java).apply {
-                    putExtra("uid", friend.uID)
-                }
-
-                context.startActivity(intent)
+                showFriendActionDialog(friend)
             }
         }
 
@@ -64,7 +59,7 @@ class FriendsAdapter(private val context: Context, private val friends: ArrayLis
 
             dialogBinding.btnSendNyangmal.setOnClickListener {
                 dialog.dismiss()
-                sendNyangmalToFriend(friend)
+                showSendNyangmalDialog(friend)
             }
 
             dialog.show()
@@ -73,14 +68,26 @@ class FriendsAdapter(private val context: Context, private val friends: ArrayLis
         private fun talkWithFriend(friend: User) {
             val context = itemView.context
             val intent = Intent(context, ChatActivity::class.java).apply {
-                putExtra("friend_name", friend.name)
+                putExtra("uid", friend.uID)
             }
 
             context.startActivity(intent)
         }
 
-        private fun sendNyangmalToFriend(friend: User) {
+        private fun showSendNyangmalDialog(friend: User) {
+            val dialog = Dialog(itemView.context)
+            val dialogBinding = DialogSendnyangmalBinding.inflate(LayoutInflater.from(itemView.context))
 
+            dialogBinding.txtSendTo.text = friend.name + "에게..."
+
+            dialog.setContentView(dialogBinding.root)
+
+            dialogBinding.btnConfirm.setOnClickListener { // 보내기 버튼 눌렀을 때
+                dialog.dismiss()
+                // 냥말 보내기
+
+            }
+            dialog.show()
         }
     }
 }

@@ -9,12 +9,13 @@
     android:padding="16dp">
 
     <TextView
+        android:id="@+id/txt_sendTo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:fontFamily="@font/poor_story"
         android:padding="8dp"
-        android:text="이름 바꾸기"
+        android:text="냥말 보내기"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -23,18 +24,18 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txt_EditNameField"
+            android:id="@+id/txt_sendNyangmal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poor_story"
-            android:hint="바꾸고 싶은 이름"
-            android:textSize="20sp" />
+            android:hint="보내고 싶은 말"
+            android:textSize="15sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btn_Confirm"
-        android:layout_width="50dp"
+        android:layout_width="75dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_weight="1"
@@ -42,7 +43,7 @@
         android:fontFamily="@font/poor_story"
         android:paddingLeft="0dp"
         android:paddingRight="0dp"
-        android:text="확인"
+        android:text="보내기"
         android:textStyle="bold" />
 
 </LinearLayout>
