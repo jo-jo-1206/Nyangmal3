@@ -3,12 +3,14 @@ package kr.kau.nyangmal3
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -16,6 +18,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import kr.kau.nyangmal3.Repository.CUserInfoRepository
 import kr.kau.nyangmal3.ViewModel.UserInfoViewModel
 import kr.kau.nyangmal3.databinding.DialogEditmynameBinding
@@ -31,6 +34,13 @@ class MyPageFragment : Fragment() {
     }
     private var _binding: FragmentMyPageBinding ?= null
     private val binding get() = _binding!!
+
+    private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let {
+            binding.imgMyProfilePic.setImageURI(it)
+            uploadImageToFirebaseStorage(it)
+        }
+    }
 
     val viewModel_userInfo : UserInfoViewModel by activityViewModels()
 
@@ -116,15 +126,7 @@ class MyPageFragment : Fragment() {
     }
 
     private fun editPicture() {
-        // 갤러리 어플 실행
-        val intent = Intent(Intent.ACTION_PICK) // 사용자가 데이터를 선택하고
-        intent.type = "image/*"
-        startActivityForResult(intent, 105)
-        // 질문 : startActivityForResult는 더이상 사용하지 않는 함수라고 하는데 이미지 접근 어케 하나요?
-
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("사진 편집창").setMessage("사진을 편집합니다")
-        builder.create().show()
+        getContent.launch("image/*")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -135,6 +137,26 @@ class MyPageFragment : Fragment() {
                     binding.imgMyProfilePic.setImageURI(uri)
                 }
             }
+        }
+    }
+
+    private fun uploadImageToFirebaseStorage(imageUri : Uri) {
+        val storageRef = Firebase.storage.reference.child("profileImages/${Firebase.auth.currentUser?.uid}")
+
+        storageRef.putFile(imageUri).addOnSuccessListener {
+            storageRef.downloadUrl.addOnSuccessListener { uri ->
+                saveImageUriToDatabase(uri.toString())
+            }
+        }.addOnFailureListener {
+            // Handle any errors
+        }
+    }
+
+    private fun saveImageUriToDatabase(imageUri: String) {
+        val userId = Firebase.auth.currentUser?.uid
+        userId?.let {
+            val userRef = Firebase.database.reference.child("users").child(it)
+            userRef.child("profileImageUrl").setValue(imageUri)
         }
     }
 
