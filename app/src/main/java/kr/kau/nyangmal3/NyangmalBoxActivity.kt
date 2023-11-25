@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import kr.kau.nyangmal3.ViewModel.CMessageViewModel
 import kr.kau.nyangmal3.databinding.ActivityNyangmalBoxBinding
 import kr.kau.nyangmal3.viewmodel.NyangmalViewModel
 
@@ -33,13 +32,7 @@ class NyangmalBoxActivity : AppCompatActivity() {
             adapter.notifyDataSetChanged()
         })
         //전송버튼눌렀을때 파이어베이스로 올리는 코드는 친구리스트에서 함
-        /*
-        binding?.'전송버튼'?.setOnClickListener {
-            val nyangText = binding!!."글쓰는칸".text.toString()
-            viewModel.addNyangmal(nyangText)
-            binding!!.'글쓰는칸'.setText("") // 설명 전송하면 다시 텍스트 칸 초기화해주기
-        }
-         */
+
         //backib눌렀을때 다시 홈액티비티로 전환됨.
         binding.backIb.setOnClickListener {
             val nextintent = Intent(this, HomeActivity::class.java)

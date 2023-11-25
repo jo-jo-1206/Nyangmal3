@@ -10,10 +10,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kr.kau.nyangmal3.databinding.FragmentSnowBinding
 import kr.kau.nyangmal3.viewmodel.SnowViewModel
 
@@ -50,10 +46,10 @@ class SnowFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 무한 루프 실행 (백그라운드 스레드에서 실행하는 것이 좋습니다.)
+        /*
         //val twentyFourHoursInMillis = 24 * 60 * 60 * 1000 // 24시간을 밀리초로 표현
         val twentyFourHoursInMillis = 1 * 60 * 60 * 1000
-
-        // 무한 루프 실행 (백그라운드 스레드에서 실행하는 것이 좋습니다.)
         GlobalScope.launch(Dispatchers.Default) {
             while (true) {
                 //delay(60 * 60 * 1000) // 1시간마다 루프 실행 (필요에 따라 시간을 조정할 수 있습니다.)
@@ -76,6 +72,7 @@ class SnowFragment : Fragment() {
                 }
             }
         }
+         */
 
         //어댑터와 데이터리스트 연결
         //근데 챗은 context자리에 this썼는데
