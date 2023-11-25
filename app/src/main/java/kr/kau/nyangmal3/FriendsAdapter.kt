@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import kr.kau.nyangmal3.databinding.DialogFriendactionBinding
 import kr.kau.nyangmal3.databinding.DialogSendnyangmalBinding
 import kr.kau.nyangmal3.databinding.ListFriendsBinding
@@ -28,6 +29,11 @@ class FriendsAdapter
     override fun onBindViewHolder(holder: friendsViewHolder, position: Int) {
         val currentUser = friends[position]
         holder.bind(currentUser)
+
+        Glide.with(context)
+            .load(currentUser.profileImageUrl)
+            .placeholder(R.drawable.defaultprofpic)
+            .into(holder.binding.imgFriendProfPic)
     }
 
     override fun getItemCount(): Int = friends.size
@@ -38,7 +44,7 @@ class FriendsAdapter
         notifyDataSetChanged()
     }
 
-    class friendsViewHolder(private val binding: ListFriendsBinding, private val viewModel: NyangmalViewModel) : RecyclerView.ViewHolder(binding.root) {
+    class friendsViewHolder(val binding: ListFriendsBinding, private val viewModel: NyangmalViewModel) : RecyclerView.ViewHolder(binding.root) {
         private var currentFriend: User ?= null
 
         val nameText: TextView = binding.txtFriendName

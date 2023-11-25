@@ -70,6 +70,6 @@ class SingUpActivity : AppCompatActivity() {
     }
 
     private fun addUserToDatabase(name: String, email: String, uID: String) {
-        DbRef.child("user").child(uID).setValue(User(name, email, uID));
+        DbRef.child("user").child(uID).setValue(User(name, email, uID, ""));
     }
 }

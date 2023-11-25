@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -36,8 +37,8 @@ class MyPageFragment : Fragment() {
 
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
-            binding.imgMyProfilePic.setImageURI(it)
-            uploadImageToFirebaseStorage(it)
+            // binding.imgMyProfilePic.setImageURI(it)
+            uploadImageToStorage(it)
         }
     }
 
@@ -74,6 +75,14 @@ class MyPageFragment : Fragment() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val userInfo = snapshot.getValue(User::class.java)
                     binding.txtUserName.text = userInfo?.name
+
+                    val profileImageUrl = if (userInfo?.profileImageUrl.isNullOrEmpty()) {
+                        "https://firebasestorage.googleapis.com/v0/b/nyangmal-38f77.appspot.com/o/profile_images%2Fdefaultprofpic.jpg?alt=media&token=49c9dc8f-06d8-4f23-acfb-41f2fb5c3ca9"
+                    } else {
+                        userInfo?.profileImageUrl
+                    }
+
+                    Glide.with(this@MyPageFragment).load(profileImageUrl).into(binding.imgMyProfilePic)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -128,36 +137,38 @@ class MyPageFragment : Fragment() {
         getContent.launch("image/*")
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK) {
-            when(requestCode) {
-                105 -> {
-                    var uri = data?.data
-                    binding.imgMyProfilePic.setImageURI(uri)
+    private fun uploadImageToStorage(imageUri: Uri) {
+        val uid = Firebase.auth.currentUser?.uid ?: return
+        val ref = Firebase.storage.reference.child("profile_images/$uid.jpg")
+
+        ref.putFile(imageUri)
+            .addOnSuccessListener {
+                ref.downloadUrl.addOnSuccessListener { uri ->
+                    saveUserToDB(uri.toString())
                 }
             }
-        }
-    }
+            .addOnFailureListener {
 
-    private fun uploadImageToFirebaseStorage(imageUri : Uri) {
-        val storageRef = Firebase.storage.reference.child("profileImages/${Firebase.auth.currentUser?.uid}")
-
-        storageRef.putFile(imageUri).addOnSuccessListener {
-            storageRef.downloadUrl.addOnSuccessListener { uri ->
-                saveImageUriToDatabase(uri.toString())
             }
-        }.addOnFailureListener {
-            // Handle any errors
-        }
     }
 
-    private fun saveImageUriToDatabase(imageUri: String) {
-        val userId = Firebase.auth.currentUser?.uid
-        userId?.let {
-            val userRef = Firebase.database.reference.child("users").child(it)
-            userRef.child("profileImageUrl").setValue(imageUri)
-        }
+    private fun saveUserToDB(profileImageUrl: String) {
+        val uid = Firebase.auth.currentUser?.uid ?: return
+        val userRef = Firebase.database.reference.child("user").child(uid)
+
+        val userUpdates = hashMapOf<String, Any>(
+            "profileImageUrl" to profileImageUrl
+        )
+
+        userRef.updateChildren(userUpdates)
+            .addOnSuccessListener {
+
+            }
+            .addOnFailureListener {
+
+            }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
