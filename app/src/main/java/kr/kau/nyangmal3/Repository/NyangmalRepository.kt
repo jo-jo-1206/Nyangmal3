@@ -15,6 +15,7 @@ class NyangmalRepository {
     val database = Firebase.database
     val nyangRef = database.getReference("nyang")
     private val nauth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val myUid: String? = nauth.currentUser?.uid
     private var receiveUid: String? = null
 
     fun setReciveUid(uid: String) {
@@ -23,11 +24,11 @@ class NyangmalRepository {
 
     //받는사람 uid아래돌면서 리스트 ㅇㅇ가져오든말든잘가져오기
     fun observeNyangData(): MutableLiveData<MutableList<NyangmalItem>> { //snow은 뮤터블리스트임
-        if (receiveUid == null) {
+        if (myUid == null) {
             throw IllegalStateException("ReciveUid is not set. Call setReciveUid(uid) before calling observeMessage()")
         }
         val mutableData = MutableLiveData<MutableList<NyangmalItem>>()
-        receiveUid?.let {
+        myUid?.let {
             nyangRef.child(it).addValueEventListener(object : ValueEventListener { //여기로리슨되어서 내부처럼바뀜.
                 val listData: MutableList<NyangmalItem> = mutableListOf<NyangmalItem>()
                 override fun onDataChange(snapshot: DataSnapshot) {
