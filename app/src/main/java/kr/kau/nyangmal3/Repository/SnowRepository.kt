@@ -48,7 +48,7 @@ class SnowRepository {
         val newItemRef = snowRef.push() // 새로운 데이터를 추가하고 반환된 참조를 newItemRef에 저장
         val newItemKey = newItemRef.key // 추가된 데이터의 고유한 키를 가져옴
 
-        val text: SnowItem=SnowItem(newItemKey,snowText, currentTime)
+        val text: SnowItem = SnowItem(newItemKey,snowText, currentTime)
         // 키를 SnowItem 데이터 클래스에 저장
         //text.key = newItemKey
 

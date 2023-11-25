@@ -100,7 +100,7 @@ class SnowFragment : Fragment() {
         binding?.snowaddIb?.setOnClickListener {
             val snowText = binding!!.snowtextEt.text.toString()
             val currentTime = System.currentTimeMillis()
-            val username =
+            // val username =
             viewModel.addSnow(snowText, currentTime)
             binding!!.snowtextEt.setText("") // 설명 전송하면 다시 텍스트 칸 초기화해주기
         }

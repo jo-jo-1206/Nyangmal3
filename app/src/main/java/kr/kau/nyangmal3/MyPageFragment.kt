@@ -21,6 +21,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kr.kau.nyangmal3.Repository.CUserInfoRepository
 import kr.kau.nyangmal3.ViewModel.UserInfoViewModel
+import kr.kau.nyangmal3.databinding.ActivityNyangmalBoxBinding
 import kr.kau.nyangmal3.databinding.DialogEditmynameBinding
 import kr.kau.nyangmal3.databinding.DialogEditprofileBinding
 import kr.kau.nyangmal3.databinding.FragmentMyPageBinding
@@ -28,12 +29,12 @@ import kr.kau.nyangmal3.databinding.FragmentMyPageBinding
 class MyPageFragment : Fragment() {
     // private var userName: String = "조성우"
 
+    private lateinit var binding: FragmentMyPageBinding
+
     private val repository = CUserInfoRepository()
     init {
         repository
     }
-    private var _binding: FragmentMyPageBinding ?= null
-    private val binding get() = _binding!!
 
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
@@ -49,7 +50,7 @@ class MyPageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentMyPageBinding.inflate(inflater, container, false)
+        binding = FragmentMyPageBinding.inflate(inflater, container, false)
 
         binding.btnEditProfile.setOnClickListener {
             showEditOptionsDialog()
@@ -167,11 +168,5 @@ class MyPageFragment : Fragment() {
             .addOnFailureListener {
 
             }
-    }
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }
