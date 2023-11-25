@@ -20,17 +20,21 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kr.kau.nyangmal3.ViewModel.UserInfoViewModel
 import kr.kau.nyangmal3.databinding.FragmentFriendListBinding
+import kr.kau.nyangmal3.viewmodel.NyangmalViewModel
 
 class FriendListFragment : Fragment() {
     private lateinit var _binding: FragmentFriendListBinding
     private val binding get() = _binding!!
     private val viewModel: UserInfoViewModel by viewModels()
+    private val viewModelNyangmal: NyangmalViewModel by viewModels()
+
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentFriendListBinding.inflate(inflater, container, false)
 
-        val friendsAdapter = FriendsAdapter(requireContext(), arrayListOf())
+        val friendsAdapter = FriendsAdapter(requireContext(), arrayListOf(), viewModelNyangmal)
 
         binding.recFriends.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         binding.recFriends.adapter = friendsAdapter

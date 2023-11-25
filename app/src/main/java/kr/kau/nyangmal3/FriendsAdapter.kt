@@ -6,16 +6,23 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import kr.kau.nyangmal3.databinding.DialogFriendactionBinding
 import kr.kau.nyangmal3.databinding.DialogSendnyangmalBinding
 import kr.kau.nyangmal3.databinding.ListFriendsBinding
+import kr.kau.nyangmal3.viewmodel.NyangmalViewModel
 
-class FriendsAdapter(private val context: Context, private val friends: ArrayList<User>)
+class FriendsAdapter
+    (
+    private val context: Context,
+    private val friends: ArrayList<User>,
+    private val viewModel: NyangmalViewModel
+            )
     : RecyclerView.Adapter<FriendsAdapter.friendsViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): friendsViewHolder {
         val binding = ListFriendsBinding.inflate(LayoutInflater.from(parent.context))
-        return friendsViewHolder(binding)
+        return friendsViewHolder(binding, viewModel)
     }
 
     override fun onBindViewHolder(holder: friendsViewHolder, position: Int) {
@@ -31,7 +38,7 @@ class FriendsAdapter(private val context: Context, private val friends: ArrayLis
         notifyDataSetChanged()
     }
 
-    class friendsViewHolder(private val binding: ListFriendsBinding) : RecyclerView.ViewHolder(binding.root) {
+    class friendsViewHolder(private val binding: ListFriendsBinding, private val viewModel: NyangmalViewModel) : RecyclerView.ViewHolder(binding.root) {
         private var currentFriend: User ?= null
 
         val nameText: TextView = binding.txtFriendName
@@ -85,6 +92,12 @@ class FriendsAdapter(private val context: Context, private val friends: ArrayLis
             dialogBinding.btnConfirm.setOnClickListener { // 보내기 버튼 눌렀을 때
                 dialog.dismiss()
                 // 냥말 보내기
+
+                // 냥말 박스
+                val nyangText = dialogBinding.txtSendNyangmal.text.toString()
+
+                viewModel.addNyangmal(nyangText)
+                dialogBinding.txtSendNyangmal.setText("") // 설명 전송하면 다시 텍스트 칸 초기화해주기
 
             }
             dialog.show()
