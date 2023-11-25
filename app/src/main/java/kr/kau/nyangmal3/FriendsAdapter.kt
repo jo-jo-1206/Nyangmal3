@@ -102,8 +102,8 @@ class FriendsAdapter
                 // 냥말 박스
                 val nyangText = dialogBinding.txtSendNyangmal.text.toString()
 
-                viewModel.addNyangmal(nyangText)
                 viewModel.setReceiveUid(friend.uID)
+                viewModel.addNyangmal(nyangText)
                 dialogBinding.txtSendNyangmal.setText("") // 설명 전송하면 다시 텍스트 칸 초기화해주기
 
             }

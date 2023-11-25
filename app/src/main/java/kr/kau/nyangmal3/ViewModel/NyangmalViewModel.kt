@@ -23,6 +23,13 @@ class NyangmalViewModel: ViewModel() {
         }
         return mutableData
     }
+    /*
+    // 수정된 fetchData 메서드
+    fun fetchData(): LiveData<ArrayList<NyangmalItem>> {
+        // 기존의 LiveData 사용 대신 repository에서 가져온 LiveData를 그대로 반환
+        return repository.observeNyangData()
+    }
+     */
 
     fun addNyangmal(nyangText: String){
         // 여기에서 이미지 및 텍스트 업로드 메서드를 호출하여 Firebase에 데이터를 추가

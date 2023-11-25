@@ -56,25 +56,44 @@ class NyangmalRepository {
     }
 
     // 텍스트 데이터베이스에 업로드
-    fun uploadText(nyangText: String){
-        val newItemRef = nyangRef.push() // 새로운 데이터를 추가하고 반환된 참조를 newItemRef에 저장
-        val newItemKey = newItemRef.key // 추가된 데이터의 고유한 키를 가져옴
+//    fun uploadText(nyangText: String){
+//        val newItemRef =
+//            receiveUid?.let { nyangRef.child(it).push() } // 새로운 데이터를 추가하고 반환된 참조를 newItemRef에 저장
+//        val newItemKey = newItemRef?.key // 추가된 데이터의 고유한 키를 가져옴
+//
+//        val text: NyangmalItem = NyangmalItem(newItemKey, nyangText)
+////받는사람 uid아래 뉴고유키아래에 텍스트 저장 ㅇㅇ
+//        receiveUid?.let {
+//            newItemKey?.let { it2 ->
+//                nyangRef.child(it).child(it2).setValue(text)
+//            }
+//        }
+//    }
+    fun uploadText(nyangText: String) {
+        val newItemRef = receiveUid?.let { nyangRef.child(it).push() }
+        val newItemKey = newItemRef?.key
 
         val text: NyangmalItem = NyangmalItem(newItemKey, nyangText)
-//받는사람 uid아래 뉴고유키아래에 텍스트 저장 ㅇㅇ
-        receiveUid?.let {
-            newItemKey?.let { it2 ->
-                nyangRef.child(it).child(it2).setValue(text)
+
+        if (newItemKey != null) {
+            receiveUid?.let {
+                nyangRef.child(it).child(newItemKey).setValue(text)
             }
         }
     }
 
-    fun deleteData(nyangmalItem: NyangmalItem) {
-        val itemKey = nyangmalItem.key // SnowItem에서 키를 가져옴
-        if (itemKey != null) {
-            nyangRef.child(itemKey).removeValue() // 해당 키에 대한 데이터 삭제
-        }
+//    fun deleteData(nyangmalItem: NyangmalItem) {
+//        val itemKey = nyangmalItem.key // SnowItem에서 키를 가져옴
+//        if (itemKey != null) {
+//            nyangRef.child(itemKey).removeValue() // 해당 키에 대한 데이터 삭제
+//        }
+//    }
+fun deleteData(nyangmalItem: NyangmalItem) {
+    val itemKey = nyangmalItem.key
+    itemKey?.let {
+        nyangRef.child(receiveUid ?: "").child(it).removeValue()
     }
+}
     //firebase에서 데이터를 삭제
     // snowItem을 삭제하는 코드를 작성해야 합니다.
     // 예를 들어 Firebase Realtime Database에서 해당 데이터를 삭제하는 코드가 여기에 위치합니다.
