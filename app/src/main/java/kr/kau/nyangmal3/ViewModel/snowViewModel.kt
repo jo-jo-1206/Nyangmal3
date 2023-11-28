@@ -28,10 +28,10 @@ class SnowViewModel: ViewModel() {
         return mutableData
     }
 
-    fun addSnow(snowText: String, currentTime: Long){
+    fun addSnow(userName: String, snowText: String, currentTime: Long){
         // 여기에서 이미지 및 텍스트 업로드 메서드를 호출하여 Firebase에 데이터를 추가
         //레파지토리를 이용해 데이터베이스에 값을 저장
-        repository.uploadText(snowText, currentTime)
+        repository.uploadText(userName, snowText, currentTime)
         //repository.uploadImage(Uri.parse(data.imageUrl)) // 이미지 업로드 호출, imageUrl을 Uri로 변환하여 전달
     }
 

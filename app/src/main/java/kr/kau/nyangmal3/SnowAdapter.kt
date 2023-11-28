@@ -50,6 +50,7 @@ class SnowAdapter(private val context: SnowFragment) : RecyclerView.Adapter<Recy
             snowList?.let {
                 binding.postTextTv.text = it.postText
                 binding.timestampTv.text= getElapsedTime(it.timestamp)
+                binding.userNameTv.text= it.userName
             }
         }
         fun getElapsedTime(timestampInMillis: Long): String {
