@@ -10,8 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import kr.kau.nyangmal3.ViewModel.UserInfoViewModel
 import kr.kau.nyangmal3.databinding.FragmentSnowBinding
 import kr.kau.nyangmal3.viewmodel.SnowViewModel
 
@@ -30,7 +29,8 @@ class SnowFragment : Fragment() {
     //lateinit var binding: FragmentSnowBinding
     private lateinit var adapter: SnowAdapter
 
-    private val viewModel: SnowViewModel by viewModels()
+    private val viewModelS: SnowViewModel by viewModels()
+    private val viewModelU: UserInfoViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,7 +92,7 @@ class SnowFragment : Fragment() {
         // 값이 변경될때마다 내부코드가 실행됨
         // Observe는 라이브데이터변경감지하다갑 변경되면 snowData라는 파라미터 받음
         // 처음에 데이터 한개도없으면 실행안되어야 맞는데 observe가
-        viewModel.fetchData().observe(viewLifecycleOwner, Observer {
+        viewModelS.fetchData().observe(viewLifecycleOwner, Observer {
             adapter.setListData(it)
             adapter.notifyDataSetChanged()
             binding?.recyclerSnows?.scrollToPosition(adapter.itemCount - 1)
@@ -102,9 +102,20 @@ class SnowFragment : Fragment() {
         binding?.snowaddIb?.setOnClickListener {
             val snowText = binding!!.snowtextEt.text.toString()
             val currentTime = System.currentTimeMillis()
-            val userName = "tt"
-            viewModel.addSnow(userName, snowText, currentTime)
-            binding!!.snowtextEt.setText("") // 설명 전송하면 다시 텍스트 칸 초기화해주기
+            viewModelU.fetchMyName()
+            var isNameFetched = false // 플래그 설정
+
+            viewModelU.myName.observe(viewLifecycleOwner) { userName ->
+                userName?.let {
+                    if (!isNameFetched) { // 플래그를 확인하여 한 번만 처리
+                        viewModelS.addSnow(it, snowText, currentTime)
+                        binding!!.snowtextEt.setText("") // 설명 전송하면 다시 텍스트 칸 초기화해주기
+                        isNameFetched = true // 플래그 변경
+                    }
+                }
+            }
+//            viewModelS.addSnow(userName, snowText, currentTime)
+//            binding!!.snowtextEt.setText("") // 설명 전송하면 다시 텍스트 칸 초기화해주기
         }
          //이미지 업로드 클릭하면 선택한이미지를 파이어베이스에 업로드하고 이미지선택을위해 갤러리 인텐트 호출해줘야함
         //binding?.snowimageIb?.setOnClickListener {}

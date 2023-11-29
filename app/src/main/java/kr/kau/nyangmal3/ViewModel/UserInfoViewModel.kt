@@ -10,10 +10,18 @@ class UserInfoViewModel: ViewModel() {
     private val repository = CUserInfoRepository()
     private val _friendsList = MutableLiveData<ArrayList<User>>()
     val friendsList: LiveData<ArrayList<User>> = _friendsList
+    private val _myName = MutableLiveData<String?>()
+    val myName: LiveData<String?> = _myName
 
     fun loadFriendsList() {
         repository.getFriendsList { friends ->
             _friendsList.value = friends
+        }
+    }
+
+    fun fetchMyName() {
+        repository.getMyName { name ->
+            _myName.postValue(name)
         }
     }
 }
