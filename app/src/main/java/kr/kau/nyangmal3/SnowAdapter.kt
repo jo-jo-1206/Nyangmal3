@@ -56,6 +56,10 @@ class SnowAdapter(private val context: SnowFragment) : RecyclerView.Adapter<Recy
         fun getElapsedTime(timestampInMillis: Long): String {
             val elapsedMillis = System.currentTimeMillis() - timestampInMillis
             val hours = TimeUnit.MILLISECONDS.toHours(elapsedMillis)
+            if (hours < 1){
+                val minutes = TimeUnit.MILLISECONDS.toMinutes(elapsedMillis)
+                return "$minutes minutes ago"
+            }
             return "$hours hours ago"
         }
     }
