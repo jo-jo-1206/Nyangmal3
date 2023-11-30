@@ -38,6 +38,10 @@ class MyPageFragment : Fragment() {
             startActivity(intent)
         }
 
+        binding.btnMonologue.setOnClickListener {
+
+        }
+
         return binding.root
     }
 
