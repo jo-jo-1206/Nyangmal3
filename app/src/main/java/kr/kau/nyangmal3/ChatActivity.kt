@@ -68,7 +68,7 @@ class ChatActivity : AppCompatActivity() {
         }
 
         // 뒤로가기 버튼
-        binding.backBtn.setOnClickListener {
+        binding.btnBack.setOnClickListener {
             val intent = Intent(this, HomeActivity::class.java)
             startActivity(intent)
         }

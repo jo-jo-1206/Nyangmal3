@@ -49,7 +49,7 @@ class SnowFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // 24시간 이전의 timestamp를 가져오기
-        /*
+
         val twentyFourHoursAgo = System.currentTimeMillis() - (24 * 60 * 60 * 1000)
 
         viewModelS.fetchData().observe(viewLifecycleOwner) { snowItems ->
@@ -66,8 +66,6 @@ class SnowFragment : Fragment() {
                 }
             }
         }
-
-         */
 
 
         //어댑터와 데이터리스트 연결
