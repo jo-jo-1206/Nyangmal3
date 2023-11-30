@@ -48,33 +48,27 @@ class SnowFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 무한 루프 실행 (백그라운드 스레드에서 실행하는 것이 좋습니다.)
+        // 24시간 이전의 timestamp를 가져오기
         /*
-        //val twentyFourHoursInMillis = 24 * 60 * 60 * 1000 // 24시간을 밀리초로 표현
-        val twentyFourHoursInMillis = 1 * 60 * 60 * 1000
-        GlobalScope.launch(Dispatchers.Default) {
-            while (true) {
-                //delay(60 * 60 * 1000) // 1시간마다 루프 실행 (필요에 따라 시간을 조정할 수 있습니다.)
-                delay(60 * 1000)
-                val currentTime = System.currentTimeMillis()
+        val twentyFourHoursAgo = System.currentTimeMillis() - (24 * 60 * 60 * 1000)
 
-                // 데이터 가져오기
-                val snowItems = viewModel.fetchData().value
-
-                snowItems?.forEach { snowItem ->
-                    if (currentTime - snowItem.timestamp > twentyFourHoursInMillis) {
-                        // 삭제할 아이템의 위치 가져오기
-                        val positionToRemove = snowItems.indexOf(snowItem)
-                        //24시간이 지난 아이템 삭제 (ui에서 먼저 삭제하고 실제 데이터 삭제해야 좋을 것 같음)
-                        //positionToRemove는 삭제하려는 아이템의 위치(인덱스)
+        viewModelS.fetchData().observe(viewLifecycleOwner) { snowItems ->
+            snowItems.forEach { snowItem ->
+                if (snowItem.timestamp < twentyFourHoursAgo) {
+                    // 삭제할 아이템의 위치 가져오기
+                    val positionToRemove = snowItems.indexOf(snowItem)
+                    if (positionToRemove != -1) {
+                        // 24시간이 지난 아이템 삭제 (UI에서 먼저 삭제)
                         adapter.removeItem(positionToRemove)
                         // 24시간이 지난 데이터 삭제
-                        viewModel.deleteSnow(snowItem)
+                        viewModelS.deleteSnow(snowItem)
                     }
                 }
             }
         }
+
          */
+
 
         //어댑터와 데이터리스트 연결
         //근데 챗은 context자리에 this썼는데
@@ -99,6 +93,7 @@ class SnowFragment : Fragment() {
         })
 
         //스노우애드 클릭하면 포스트 업데이트될것임.
+
         binding?.snowaddIb?.setOnClickListener {
             val snowText = binding!!.snowtextEt.text.toString()
             val currentTime = System.currentTimeMillis()
@@ -117,7 +112,30 @@ class SnowFragment : Fragment() {
 //            viewModelS.addSnow(userName, snowText, currentTime)
 //            binding!!.snowtextEt.setText("") // 설명 전송하면 다시 텍스트 칸 초기화해주기
         }
-         //이미지 업로드 클릭하면 선택한이미지를 파이어베이스에 업로드하고 이미지선택을위해 갤러리 인텐트 호출해줘야함
+
+
+//        binding?.snowaddIb?.setOnClickListener {
+//            val snowText = binding!!.snowtextEt.text.toString()
+//            val currentTime = System.currentTimeMillis()
+//
+//            // 이미 이름을 가져왔는지 확인하는 LiveData
+//            val nameFetchedObserver = Observer<String> { userName ->
+//                userName?.let {
+//                    viewModelS.addSnow(it, snowText, currentTime)
+//                    binding!!.snowtextEt.setText("") // 설명 전송하면 다시 텍스트 칸 초기화
+//                    // 관찰이 끝났으므로 관찰 해제
+//                    viewModelU.myName.removeObserver(this)
+//                }
+//            }
+//
+//            // 이름을 가져오기 위한 ViewModel의 메서드 호출
+//            viewModelU.fetchMyName()
+//
+//            // 이미 이름을 가져왔는지를 관찰하는 Observer를 등록
+//            viewModelU.myName.observe(viewLifecycleOwner, nameFetchedObserver)
+//        }
+
+        //이미지 업로드 클릭하면 선택한이미지를 파이어베이스에 업로드하고 이미지선택을위해 갤러리 인텐트 호출해줘야함
         //binding?.snowimageIb?.setOnClickListener {}
     }
 
