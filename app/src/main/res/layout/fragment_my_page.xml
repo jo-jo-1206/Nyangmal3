@@ -95,7 +95,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poor_story"
-                android:text="조성우"
                 android:textAlignment="center"
                 android:textSize="40sp"
                 android:textStyle="bold" />
@@ -112,7 +111,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/testprofilepic" />
+                android:src="@drawable/defaultprofpic" />
         </LinearLayout>
 
     </LinearLayout>

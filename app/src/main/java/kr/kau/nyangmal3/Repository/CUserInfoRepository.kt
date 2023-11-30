@@ -1,47 +1,55 @@
 package kr.kau.nyangmal3.Repository
 
-import androidx.lifecycle.MutableLiveData
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.database
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import kr.kau.nyangmal3.CMessageData
 import kr.kau.nyangmal3.User
 
 class CUserInfoRepository {
     private val dbRef: DatabaseReference = Firebase.database.reference
     private val userRef = dbRef.child("user")
-    private val auth: FirebaseAuth = Firebase.auth
 
     fun getFriendsList(onResult: (ArrayList<User>) -> Unit) {
         val friendList = ArrayList<User>()
 
-        userRef.addValueEventListener(object: ValueEventListener {
+        userRef.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 friendList.clear()
-
-                for (postSnapshot in snapshot.children) {
-                    val user = postSnapshot.getValue(User::class.java)
-
-                    if (auth.currentUser?.uid != user?.uID) {
-                        user?.let {
-                            friendList.add(it)
-                        }
-                    }
-                }
-
+                snapshot.children.mapNotNullTo(friendList) { it.getValue(User::class.java) }
                 onResult(friendList)
             }
 
             override fun onCancelled(error: DatabaseError) {
+                // 적절한 에러 처리
+            }
+        })
+    }
 
+    fun getUserProfile(userId: String, onResult: (User) -> Unit) {
+        userRef.child(userId).addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                snapshot.getValue(User::class.java)?.let(onResult)
             }
 
+            override fun onCancelled(error: DatabaseError) {
+                // 적절한 에러 처리
+            }
         })
+    }
+
+    fun updateUser(uid: String, updates: Map<String, Any>, onComplete: (Boolean) -> Unit) {
+        userRef.child(uid).updateChildren(updates)
+            .addOnSuccessListener { onComplete(true) }
+            .addOnFailureListener { onComplete(false) }
+    }
+
+    fun updateUserName(uid: String, newName: String, onComplete: (Boolean) -> Unit) {
+        updateUser(uid, hashMapOf("name" to newName), onComplete)
+    }
+    fun updateUserImage(uid: String, imageUrl: String, onComplete: (Boolean) -> Unit) {
+        updateUser(uid, hashMapOf("profileImageUrl" to imageUrl), onComplete)
     }
 }
