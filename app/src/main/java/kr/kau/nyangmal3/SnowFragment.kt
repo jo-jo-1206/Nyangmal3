@@ -111,8 +111,6 @@ class SnowFragment : Fragment() {
                     }
                 }
             }
-//            viewModelS.addSnow(userName, snowText, currentTime)
-//            binding!!.snowtextEt.setText("") // 설명 전송하면 다시 텍스트 칸 초기화해주기
         }
 
 

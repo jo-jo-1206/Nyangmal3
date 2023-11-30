@@ -6,8 +6,6 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import kr.kau.nyangmal3.databinding.ActivityNyangmalBoxBinding
 import kr.kau.nyangmal3.viewmodel.NyangmalViewModel
 
@@ -23,7 +21,12 @@ class NyangmalBoxActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // 어댑터
-        adapter = NyangmalAdapter(this)
+        adapter = NyangmalAdapter(this) { position ->
+            // 클릭된 위치에 대한 삭제 처리
+
+            viewModel.deleteNynagmal(adapter.getItemAt(position))
+            adapter.removeItem(position)
+        }
         binding.recyclerNyangmals.layoutManager = LinearLayoutManager(this)
         binding.recyclerNyangmals.adapter = adapter
 
@@ -40,6 +43,13 @@ class NyangmalBoxActivity : AppCompatActivity() {
             val nextintent = Intent(this, HomeActivity::class.java)
             startActivity(nextintent)
         }
+
+        setupNyangmalAdapter()
+
+    }
+
+    private fun setupNyangmalAdapter() {
+        binding.recyclerNyangmals.adapter = adapter
     }
 
     //상태변화에 따라 달라지는 작업은 여기서 해야하나??? 숫자 카운트되는거

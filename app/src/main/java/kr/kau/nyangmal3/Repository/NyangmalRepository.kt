@@ -90,8 +90,10 @@ class NyangmalRepository {
 //    }
 fun deleteData(nyangmalItem: NyangmalItem) {
     val itemKey = nyangmalItem.key
-    itemKey?.let {
-        nyangRef.child(receiveUid ?: "").child(it).removeValue()
+    if (itemKey != null) {
+        myUid?.let {
+            nyangRef.child(it).child(itemKey).removeValue()
+        }
     }
 }
     //firebase에서 데이터를 삭제
