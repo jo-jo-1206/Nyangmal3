@@ -35,8 +35,10 @@ class NyangmalBoxActivity : AppCompatActivity() {
             adapter.setListData(newData)
             binding.recyclerNyangmals.scrollToPosition(adapter.itemCount - 1)
             adapter.notifyDataSetChanged()
+            binding.nyangcntTv.text = adapter.itemCount.toString()
         })
         //전송버튼눌렀을때 파이어베이스로 올리는 코드는 친구리스트에서 함
+
 
         //backib눌렀을때 다시 홈액티비티로 전환됨.
         binding.backIb.setOnClickListener {
@@ -50,6 +52,7 @@ class NyangmalBoxActivity : AppCompatActivity() {
 
     private fun setupNyangmalAdapter() {
         binding.recyclerNyangmals.adapter = adapter
+        binding.nyangcntTv.text = adapter.itemCount.toString()
     }
 
     //상태변화에 따라 달라지는 작업은 여기서 해야하나??? 숫자 카운트되는거

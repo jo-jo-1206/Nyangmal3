@@ -34,34 +34,9 @@ class NyangmalAdapter(private val context: android.content.Context, private val 
     //아이템뷰객체들이 날아가지않도록 잡고있는 아이
     //그럼 매개변수로 아이템뷰객체를 받아야겠지? >그래서 아이템앨범객체를 받아온것임.
     //그리고 뷰홀더 상속받을때 바인딩루트를 어 걍 저렇게 한다고만 알아둬라
-    /*
     class NyangmalViewHolder(private val binding: ItemNyangBinding) :
         RecyclerView.ViewHolder(binding.root) {
         //이 바인드함수가 받아온데이터를 아이템뷰객체에넣어줌.
-        init {
-            // 아이템 뷰에 클릭 리스너를 설정합니다.
-            binding.deleteIb.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    // RecyclerView.NO_POSITION은 유효하지 않은 위치를 나타내는 상수입니다.
-                    // 여기에서는 실제 아이템을 삭제하는 기능을 호출할 수 있습니다.
-                    // 예를 들어 뷰모델을 통해 삭제 기능을 호출할 수 있습니다.
-                    // viewModel.deleteNyangmalItem(nyangmalList[position])
-                    onDeleteClick(position)
-                }
-            }
-        }
-        fun bind(nyangmalList: NyangmalItem?) {
-            nyangmalList?.let {
-                binding.messageTv.text = it.nyangText
-            }
-        }
-    }
-
-     */
-    class NyangmalViewHolder(private val binding: ItemNyangBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
         fun bind(nyangmalList: NyangmalItem?, onDeleteClick: (Int) -> Unit) {
             nyangmalList?.let {
                 binding.messageTv.text = it.nyangText
