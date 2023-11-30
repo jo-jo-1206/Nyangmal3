@@ -53,18 +53,22 @@ class SnowFragment : Fragment() {
         val twentyFourHoursAgo = System.currentTimeMillis() - (24 * 60 * 60 * 1000)
 
         viewModelS.fetchData().observe(viewLifecycleOwner) { snowItems ->
+            val itemsToRemove = mutableListOf<SnowItem>()
+
             snowItems.forEach { snowItem ->
                 if (snowItem.timestamp < twentyFourHoursAgo) {
-                    // 삭제할 아이템의 위치 가져오기
-                    val positionToRemove = snowItems.indexOf(snowItem)
-                    if (positionToRemove != -1) {
-                        // 24시간이 지난 아이템 삭제 (UI에서 먼저 삭제)
-                        adapter.removeItem(positionToRemove)
-                        // 24시간이 지난 데이터 삭제
-                        viewModelS.deleteSnow(snowItem)
-                    }
+                    itemsToRemove.add(snowItem)
                 }
             }
+
+            itemsToRemove.forEach { snowItem ->
+                viewModelS.deleteSnow(snowItem)
+            }
+
+            // 업데이트된 목록으로 UI 갱신
+            val updatedList = snowItems - itemsToRemove
+            adapter.setListData(updatedList.toMutableList())
+            adapter.notifyDataSetChanged()
         }
 
 
