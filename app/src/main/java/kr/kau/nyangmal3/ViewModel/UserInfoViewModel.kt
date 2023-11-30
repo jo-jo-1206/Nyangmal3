@@ -21,6 +21,8 @@ class UserInfoViewModel: ViewModel() {
 
     private val _friendsList = MutableLiveData<ArrayList<User>>()
     val friendsList: LiveData<ArrayList<User>> = _friendsList
+    private val _myName = MutableLiveData<String?>()
+    val myName: LiveData<String?> = _myName
 
     private fun getCurrentUserId(): String? = Firebase.auth.currentUser?.uid
 
@@ -70,6 +72,12 @@ class UserInfoViewModel: ViewModel() {
                 .addOnFailureListener {
                     _updateResult.postValue(false)
                 }
+        }
+    }
+
+    fun fetchMyName() {
+        repository.getMyName { name ->
+            _myName.postValue(name)
         }
     }
 }

@@ -13,6 +13,7 @@ class SnowRepository {
     //firebase에서 데이터를 가져와  라이브데이터에 ㄱㄱ
     val database = Firebase.database
     val snowRef = database.getReference("snow")
+
     fun observeSnowData(): MutableLiveData<MutableList<SnowItem>> { //snow은 뮤터블리스트임
         val mutableData = MutableLiveData<MutableList<SnowItem>>()
 
@@ -41,14 +42,14 @@ class SnowRepository {
     }
 
     // 텍스트 데이터베이스에 업로드
-    fun uploadText(snowText: String, currentTime: Long){
+    fun uploadText(userName: String, snowText: String, currentTime: Long){
 
 //        var snowKey: String = "post" 따로 정해주고싶으면 이렇게 해도되고
 //        snowRef.child(snowKey).push().setValue(text)
         val newItemRef = snowRef.push() // 새로운 데이터를 추가하고 반환된 참조를 newItemRef에 저장
         val newItemKey = newItemRef.key // 추가된 데이터의 고유한 키를 가져옴
 
-        val text: SnowItem = SnowItem(newItemKey,snowText, currentTime)
+        val text: SnowItem = SnowItem(userName, newItemKey,snowText, currentTime)
         // 키를 SnowItem 데이터 클래스에 저장
         //text.key = newItemKey
 

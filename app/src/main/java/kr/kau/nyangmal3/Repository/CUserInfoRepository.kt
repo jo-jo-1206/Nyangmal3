@@ -36,6 +36,29 @@ class CUserInfoRepository {
 
             override fun onCancelled(error: DatabaseError) {
                 // 적절한 에러 처리
+    //현재 uid와 저장된 uid를 비교하여 같다면 name을 가져와서 변수에 저장하기
+    fun getMyName(onNameResult: (String?) -> Unit) {
+        val myUid = auth.currentUser?.uid
+
+        userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var myName: String? = null
+
+                for (postSnapshot in snapshot.children) {
+                    val user = postSnapshot.getValue(User::class.java)
+
+                    // Check if the UID matches
+                    if (user?.uID == myUid) {
+                        myName = user?.name
+                        break
+                    }
+                }
+
+                onNameResult(myName)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                onNameResult(null)
             }
         })
     }
