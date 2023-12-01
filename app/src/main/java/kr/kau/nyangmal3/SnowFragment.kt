@@ -128,6 +128,7 @@ class SnowFragment : Fragment() {
                             viewModelS.addSnow(it, snowText, currentTime, imageUri)
                             binding!!.snowtextEt.setText("") // 설명 전송하면 다시 텍스트 칸 초기화해주기
                             binding!!.snowimageIb.setImageResource(R.drawable.image_snow)
+                            viewModelS.resetSelectedImageUri()
                             isNameFetched = true // 플래그 변경
                         }
                     }

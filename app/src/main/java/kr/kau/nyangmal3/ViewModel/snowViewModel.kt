@@ -43,12 +43,17 @@ class SnowViewModel: ViewModel() {
     }
 
     private var selectedImageUri: Uri? = null
+
     fun setSelectedImageUri(uri: Uri) {
         selectedImageUri = uri
     }
 
     fun getSelectedImageUri(): Uri? {
         return selectedImageUri
+    }
+
+    fun resetSelectedImageUri() {
+        selectedImageUri = null
     }
 
 
