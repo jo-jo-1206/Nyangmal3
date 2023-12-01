@@ -7,6 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,11 +29,15 @@ class SnowFragment : Fragment() {
 
 
     var binding: FragmentSnowBinding? = null
-    //lateinit var binding: FragmentSnowBinding
     private lateinit var adapter: SnowAdapter
 
     private val viewModelS: SnowViewModel by viewModels()
     private val viewModelU: UserInfoViewModel by viewModels()
+
+    // Toast 메시지를 보여주는 함수
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,25 +101,39 @@ class SnowFragment : Fragment() {
             binding?.recyclerSnows?.scrollToPosition(adapter.itemCount - 1)
         })
 
-        //스노우애드 클릭하면 포스트 업데이트될것임.
 
+        binding?.snowimageIb?.setOnClickListener {
+            // 이미지 선택 작업 실행
+            pickImage()
+        }
+
+        //스노우애드 클릭하면 포스트 업데이트될것임.
         binding?.snowaddIb?.setOnClickListener {
             val snowText = binding!!.snowtextEt.text.toString()
             val currentTime = System.currentTimeMillis()
             viewModelU.fetchMyName()
             var isNameFetched = false // 플래그 설정
+            val imageUri = viewModelS.getSelectedImageUri()
 
-            viewModelU.myName.observe(viewLifecycleOwner) { userName ->
-                userName?.let {
-                    if (!isNameFetched) { // 플래그를 확인하여 한 번만 처리
-                        viewModelS.addSnow(it, snowText, currentTime)
-                        binding!!.snowtextEt.setText("") // 설명 전송하면 다시 텍스트 칸 초기화해주기
-                        isNameFetched = true // 플래그 변경
+            // 이미지가 선택되지 않았다면 경고 메시지 표시
+            if (imageUri == null) {
+                showToast("이미지를 선택하세요.")
+            } else {
+                // 이미지 URL을 가져와서 데이터베이스에 업로드
+                //val imageUrl = imageUri.toString()
+                viewModelU.myName.observe(viewLifecycleOwner) { userName ->
+                    userName?.let {
+                        if (!isNameFetched) { // 플래그를 확인하여 한 번만 처리
+                            viewModelS.addImage(imageUri)
+                            viewModelS.addSnow(it, snowText, currentTime, imageUri)
+                            binding!!.snowtextEt.setText("") // 설명 전송하면 다시 텍스트 칸 초기화해주기
+                            binding!!.snowimageIb.setImageResource(R.drawable.image_snow)
+                            isNameFetched = true // 플래그 변경
+                        }
                     }
                 }
             }
         }
-
 
 //        binding?.snowaddIb?.setOnClickListener {
 //            val snowText = binding!!.snowtextEt.text.toString()
@@ -138,6 +159,27 @@ class SnowFragment : Fragment() {
         //이미지 업로드 클릭하면 선택한이미지를 파이어베이스에 업로드하고 이미지선택을위해 갤러리 인텐트 호출해줘야함
         //binding?.snowimageIb?.setOnClickListener {}
     }
+    // 이미지 선택을 위한 함수
+    private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let {
+            // ViewModel에 선택된 이미지 URI 전달
+            viewModelS.setSelectedImageUri(uri)
+            // 이미지 버튼 업데이트
+            binding?.snowimageIb?.setImageURI(uri)
+        } ?: showToast("이미지 선택이 취소되었습니다.")
+    }
+    private fun pickImage() {
+//        val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+//            uri?.let {
+//                // ViewModel에 선택된 이미지 URI 전달
+//                viewModelS.setSelectedImageUri(uri)
+//                // 이미지 버튼 업데이트
+//                binding?.snowimageIb?.setImageURI(uri)
+//            } ?: showToast("이미지 선택이 취소되었습니다.")
+//        }
+        getContent.launch("image/*")
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

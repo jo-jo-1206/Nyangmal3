@@ -1,11 +1,14 @@
 package kr.kau.nyangmal3.repository
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
+import com.google.firebase.storage.storage
 import kr.kau.nyangmal3.SnowItem
 
 
@@ -42,20 +45,40 @@ class SnowRepository {
     }
 
     // 텍스트 데이터베이스에 업로드
-    fun uploadText(userName: String, snowText: String, currentTime: Long){
+    fun uploadText(userName: String, snowText: String, currentTime: Long, imageUrl: Uri) {
+        /*val imageUploadTask = uploadImage(imageUrl)
 
-//        var snowKey: String = "post" 따로 정해주고싶으면 이렇게 해도되고
-//        snowRef.child(snowKey).push().setValue(text)
+        imageUploadTask.addOnSuccessListener { imageUri ->
+            val newItemRef = snowRef.push() // 새로운 데이터를 추가하고 반환된 참조를 newItemRef에 저장
+            val newItemKey = newItemRef.key // 추가된 데이터의 고유한 키를 가져옴
+
+            val text: SnowItem = SnowItem(userName, newItemKey, snowText, currentTime, imageUri.toString())
+            newItemKey?.let { snowRef.child(it).setValue(text) }
+        }.addOnFailureListener { exception ->
+            // 이미지 업로드 실패 시 처리할 내용
+            // 예외 처리 등을 수행할 수 있습니다.
+        }
+         */
         val newItemRef = snowRef.push() // 새로운 데이터를 추가하고 반환된 참조를 newItemRef에 저장
         val newItemKey = newItemRef.key // 추가된 데이터의 고유한 키를 가져옴
 
-        val text: SnowItem = SnowItem(userName, newItemKey,snowText, currentTime)
-        // 키를 SnowItem 데이터 클래스에 저장
-        //text.key = newItemKey
-
-        // 이후 해당 키를 사용하여 데이터를 저장
+        val text: SnowItem = SnowItem(userName, newItemKey, snowText, currentTime, imageUrl.toString())
         newItemKey?.let { snowRef.child(it).setValue(text) }
-        //snowRef.push().setValue(text)
+
+    }
+    fun uploadImage(imageUri: Uri): Task<Uri> {
+        val imageName = "${System.currentTimeMillis()}_image.jpg" // 이미지 파일명 생성
+        val imageRef = Firebase.storage.reference.child("snow/$imageName") // Firebase Storage 경로 지정
+
+        // 이미지를 Firebase Storage에 업로드
+        return imageRef.putFile(imageUri)
+            .continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let { throw it }
+                }
+                // 이미지 업로드가 성공하면 다운로드 URL을 반환
+                imageRef.downloadUrl
+            }
     }
 
     //firebase에서 데이터를 삭제

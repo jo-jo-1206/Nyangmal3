@@ -16,12 +16,12 @@
         android:textStyle="bold"
         android:layout_marginTop="8dp"/>
 
-<!--    <ImageView-->
-<!--        android:id="@+id/postImage_iv"-->
-<!--        android:layout_width="350dp"-->
-<!--        android:layout_height="350dp"-->
-<!--        android:src="@drawable/image_snow"-->
-<!--        android:layout_marginTop="8dp"/>-->
+    <ImageView
+        android:id="@+id/postImage_iv"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:src="@drawable/image_snow"
+        android:layout_marginTop="8dp"/>
 
     <TextView
         android:id="@+id/postText_tv"

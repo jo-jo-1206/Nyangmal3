@@ -3,6 +3,7 @@ package kr.kau.nyangmal3
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import kr.kau.nyangmal3.databinding.ItemSnowBinding
 import java.util.concurrent.TimeUnit
 
@@ -51,16 +52,19 @@ class SnowAdapter(private val context: SnowFragment) : RecyclerView.Adapter<Recy
                 binding.postTextTv.text = it.postText
                 binding.timestampTv.text= getElapsedTime(it.timestamp)
                 binding.userNameTv.text= it.userName
+                Glide.with(binding.root.context).load(it.imageUrl).into(binding.postImageIv)
             }
         }
-        fun getElapsedTime(timestampInMillis: Long): String {
+        private fun getElapsedTime(timestampInMillis: Long): String {
             val elapsedMillis = System.currentTimeMillis() - timestampInMillis
             val hours = TimeUnit.MILLISECONDS.toHours(elapsedMillis)
-            if (hours < 1){
-                val minutes = TimeUnit.MILLISECONDS.toMinutes(elapsedMillis)
-                return "$minutes minutes ago"
+            return when {
+                hours < 1 -> {
+                    val minutes = TimeUnit.MILLISECONDS.toMinutes(elapsedMillis)
+                    "$minutes minutes ago"
+                }
+                else -> "$hours hours ago"
             }
-            return "$hours hours ago"
         }
     }
 
