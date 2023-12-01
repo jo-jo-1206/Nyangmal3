@@ -39,7 +39,8 @@ class MyPageFragment : Fragment() {
         }
 
         binding.btnMonologue.setOnClickListener {
-
+            val intent = Intent(activity, MonologueActivity::class.java)
+            startActivity(intent)
         }
 
         return binding.root

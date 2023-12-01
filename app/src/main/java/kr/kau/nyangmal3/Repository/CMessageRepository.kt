@@ -29,6 +29,7 @@ class CMessageRepository {
     fun setReciveUid(uid: String) {
         reciveUid = uid
     }
+
     fun observeMessage(): MutableLiveData<MutableList<CMessageData>> {
         if (reciveUid == null) {
             throw IllegalStateException("ReciveUid is not set. Call setReciveUid(uid) before calling observeMessage()")
