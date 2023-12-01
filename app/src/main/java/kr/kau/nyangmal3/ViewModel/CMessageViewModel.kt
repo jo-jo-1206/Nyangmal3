@@ -1,13 +1,16 @@
 package kr.kau.nyangmal3.ViewModel
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import kr.kau.nyangmal3.CMessageData
 import kr.kau.nyangmal3.Repository.CMessageRepository
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.TimeZone
 
@@ -15,12 +18,11 @@ import java.util.TimeZone
 class CMessageViewModel : ViewModel() {
     // viewModle과 repostiroy를 연결
     private val repository = CMessageRepository()
-    //private val _mutableData = MutableLiveData<ArrayList<CMessageData>>()
-    //val message : LiveData<ArrayList<CMessageData>> get() = _mutableData
+    private val _updateResult = MutableLiveData<Boolean>()
+    private val mauth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    // 레파지토리에서 데이터 가져오기
-    // 메세지를 리스트로
 
+    private val senderUid: String? = mauth.currentUser?.uid
 
     fun setReciveUid(uid: String) {
         repository.setReciveUid(uid)
@@ -39,15 +41,23 @@ class CMessageViewModel : ViewModel() {
         repository.addMessage(data)
     }
 
-    // 시간 가져오기
-    fun getTime():String {
-        val currentTime = System.currentTimeMillis()
-        // 현재 시간을 Data 타입으로 변환
-        val timeData = Date(currentTime)
-
-        val timeFormat = SimpleDateFormat("yyyyMMddHHmmss")
-        // 시간 맞춰주기
-        timeFormat.timeZone = TimeZone.getTimeZone("GMT+09:00")
-        return timeFormat.format(timeData).toString()
+    fun updateImage(uri: Uri){
+        val fileName = Firebase.storage.reference.child("chat/$senderUid-${System.currentTimeMillis()}.jpg")
+        // 파이어베이스 스토리지의 chat 아래에 uri를 저장해라.
+        fileName.putFile(uri)
+            .addOnSuccessListener {
+                fileName.downloadUrl.addOnSuccessListener { uri ->
+                    repository.updateImage(uri.toString())
+                }
+            }
+            .addOnFailureListener {
+                _updateResult.postValue(false)
+            }
     }
+
+    // 시간 가져오기
+    fun getTime():String{
+        return repository.getTime()
+    }
+
 }
