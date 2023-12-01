@@ -1,22 +1,16 @@
 package kr.kau.nyangmal3.Repository
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
-import kotlinx.coroutines.selects.select
 import kr.kau.nyangmal3.CMessageData
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.TimeZone
 
 class CMessageRepository {
     private val database = Firebase.database
@@ -24,7 +18,7 @@ class CMessageRepository {
     private val mauth: FirebaseAuth = FirebaseAuth.getInstance()
     private val senderUid: String? = mauth.currentUser?.uid
     private var reciveUid: String? = null
-    val peopleCount = 0
+
 
     fun setReciveUid(uid: String) {
         reciveUid = uid
@@ -36,8 +30,7 @@ class CMessageRepository {
 
         val mutableData = MutableLiveData<MutableList<CMessageData>>()
         senderUid?.let {
-            //val sendRoom = "보내는 사람" + it + "받는사람" +reciveUid
-            val sendRoom = it + reciveUid
+            val sendRoom = generateRoomId(it, reciveUid!!)
 
             chatRef.child(sendRoom)
                 .addValueEventListener(object : ValueEventListener {
@@ -48,9 +41,11 @@ class CMessageRepository {
                         if (snapshot.exists()) {
                             for (postSnapshat in snapshot.children) {
                                 val getData = postSnapshat.getValue(CMessageData::class.java)
-                                // 리스트에 메세지 넣기
-                                listData.add(getData!!)
+                                if (getData is CMessageData) {
+                                    listData.add(getData)
+                                } else {
 
+                                }
                                 mutableData.value = listData
                             }
                         }
@@ -65,8 +60,8 @@ class CMessageRepository {
     fun addMessage(message: CMessageData) {
 
         senderUid?.let {
-            val sendRoom = it + reciveUid
-            val receiveRoom = reciveUid + it
+            val sendRoom = generateRoomId(it, reciveUid!!)
+            val receiveRoom = generateRoomId(reciveUid!!, it)
 
             // 파이어베이스에 데이터 넣기
             chatRef.child(sendRoom).push()
@@ -76,5 +71,37 @@ class CMessageRepository {
                 }
         }
     }
+    fun updateImage(uri: String) {
+        senderUid?.let{
+            val sendRoom = generateRoomId(it, reciveUid!!)
+            val receiveRoom = generateRoomId(reciveUid!!, it)
+
+            val imageUrl = uri
+            val messageMap = mapOf(
+                "message" to "", // You might want to provide some default value or leave it empty
+                "sendTime" to getTime(),
+                "sendId" to senderUid,
+                "image" to imageUrl
+            )
+            chatRef.child(sendRoom).push().setValue(messageMap)
+            chatRef.child(receiveRoom).push().setValue(messageMap)
+        }
+    }
+
+    private fun generateRoomId(uid1: String, uid2: String): String {
+        return "$uid1-$uid2"
+    }
+
+    fun getTime():String {
+        val currentTime = System.currentTimeMillis()
+        // 현재 시간을 Data 타입으로 변환
+        val timeData = Date(currentTime)
+
+        val timeFormat = SimpleDateFormat("yyyyMMddHHmmss")
+        // 시간 맞춰주기
+        timeFormat.timeZone = TimeZone.getTimeZone("GMT+09:00")
+        return timeFormat.format(timeData).toString()
+    }
+
 
 }

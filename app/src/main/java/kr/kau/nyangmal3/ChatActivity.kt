@@ -8,12 +8,17 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Message
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -33,18 +38,16 @@ class ChatActivity : AppCompatActivity() {
 
     private lateinit var adapter: CMessageAdapter
     private val viewModel: CMessageViewModel by viewModels()
+    private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let {
+            viewModel.updateImage(it)
+        } ?: Log.d("iamge","선택안함")
+    }
 
-    private val CHANNEL_ID = "testChannel01"   // Channel for notification
-    private var notificationManager: NotificationManager? = null
-
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // 알림 채널 만들기
-        createNotificationChannel(CHANNEL_ID, "testChannel", "this is a test Channel")
 
         // 어댑터
         adapter = CMessageAdapter(this)
@@ -60,53 +63,33 @@ class ChatActivity : AppCompatActivity() {
         binding.btnSubmit.setOnClickListener {
             val messageText = binding.edtMessage.text.toString()
             val currentTime = viewModel.getTime()
-            val messageData = CMessageData(messageText,currentTime,senderUid)
-            viewModel.addMessage(messageData)
+            val messageData = CMessageData(messageText,currentTime,senderUid,"")
+            if(messageText!=""){
+                viewModel.addMessage(messageData)
+            }
             // 메세지 전송 후 텍스트칸 초기화
             binding.edtMessage.setText("")
-            displayNotification("Nyanmal",messageText)
         }
 
         // 뒤로가기 버튼
         binding.btnBack.setOnClickListener {
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
+            finish();
+        }
+
+        binding.btnSendImg.setOnClickListener {
+            sendPicture()
         }
     }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun displayNotification(title:String,message:String) {
-        val notificationId = 45
-
-        var notification = NotificationCompat.Builder(this,CHANNEL_ID)
-            .setSmallIcon(R.drawable.submit_btn)
-            .setContentTitle(title)
-            .setContentText(message)
-
-        notificationManager?.notify(notificationId, notification.build())
-    }
-
-    private fun createNotificationChannel(channelId: String, name: String, channelDescription: String) {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
-                description = channelDescription
-            }
-            // Register the channel with the system
-            val notificationManager: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
-    }
-
     // 뷰 모델에서 채팅데이터 가져와서 어댑터에 보여줘라
     fun observerData() {
         viewModel.fetchData().observe(this, Observer {newData ->
             adapter.setListData(newData)
             binding.recyclerMessages.scrollToPosition(adapter.itemCount - 1)
             adapter.notifyDataSetChanged()
-
         })
+    }
+
+    fun sendPicture(){
+        getContent.launch("image/*")
     }
 }

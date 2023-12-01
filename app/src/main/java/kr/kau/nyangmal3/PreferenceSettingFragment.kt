@@ -41,7 +41,6 @@ class PreferenceSettingFragment:PreferenceFragmentCompat {
         auth = Firebase.auth
         prefs = preferenceManager.sharedPreferences!!
 
-
         if (rootKey == null) {
             // 객체 초기화
             messagePreference = findPreference("message")
@@ -73,14 +72,12 @@ class PreferenceSettingFragment:PreferenceFragmentCompat {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         accountPreference?.summary = snapshot.value.toString()
                     }
-
                     override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
+
                     }
 
                 })
         }
-
     }
 
     val prefListener =
@@ -91,12 +88,10 @@ class PreferenceSettingFragment:PreferenceFragmentCompat {
                     val value = prefs.getBoolean("message", false)
                     Toast.makeText(activity, "메세지 알림 성공", Toast.LENGTH_SHORT).show()
                 }
-
                 "sound_list" -> {
                     val summary = prefs.getString("sound_list", "냥냥")
                     soundListPreference?.summary = summary
                 }
-
                 "dark_mode" -> {
                     val value = prefs.getBoolean("dark_mode", false)
 
@@ -107,7 +102,6 @@ class PreferenceSettingFragment:PreferenceFragmentCompat {
                     } else {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                         Toast.makeText(activity, "다크모드 해제", Toast.LENGTH_SHORT).show()
-
                     }
                     prefs.edit().putBoolean("dark_mode", value).apply()
                 }

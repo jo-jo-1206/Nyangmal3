@@ -5,7 +5,8 @@ import android.os.Message
 data class CMessageData(
     val message: String,
     val sendTime:String,
-    var sendId:String?
+    var sendId:String?,
+    var image:String?
 ){
-    constructor():this("","","")
+    constructor():this("","","","")
 }

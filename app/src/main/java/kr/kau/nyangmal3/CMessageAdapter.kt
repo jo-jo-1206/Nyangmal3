@@ -9,24 +9,26 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import kr.kau.nyangmal3.databinding.ReceiveBinding
+import kr.kau.nyangmal3.databinding.ReceiveImageBinding
 import kr.kau.nyangmal3.databinding.SendBinding
+import kr.kau.nyangmal3.databinding.SendImageBinding
 import org.w3c.dom.Text
 
 class CMessageAdapter(private val context: android.content.Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    //val myUid = FirebaseAuth.getInstance().currentUser?.uid.toString()
     private val send = 1
     private val receive = 2
+    private val sendImage = 3
+    private val receiveImage = 4
 
     private var messageList = mutableListOf<CMessageData>() // 리스트에는 Message타입의 데이터가 들어감
     fun setListData(data: MutableList<CMessageData>){
         messageList = data
     }
 
-    // recylerview가 viewholder를 새로만들어야 할 때마다 메소드 호출
-    // 뷰홀더와 뷰를 생성하고 초기화
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         // return if - else 문으로 할 떈 안됐는데 when()으로 하니깐 됨. 뭐지??
         return when(viewType){
@@ -38,6 +40,16 @@ class CMessageAdapter(private val context: android.content.Context): RecyclerVie
                 val binding = ReceiveBinding.inflate(LayoutInflater.from(context),parent,false)
                 ReceiveViewHolder(binding)
             }
+            sendImage -> {
+                val binding = SendImageBinding.inflate(LayoutInflater.from(context), parent, false)
+                SendImageViewHolder(binding)
+
+            }
+            receiveImage ->{
+                val binding = ReceiveImageBinding.inflate(LayoutInflater.from(context), parent, false)
+                Log.d("receiveImage","recieveImage")
+                ReceiveImageViewHolder(binding)
+            }
             else -> {throw IllegalArgumentException("Invalid view type: $viewType")}
         }
     }
@@ -45,32 +57,37 @@ class CMessageAdapter(private val context: android.content.Context): RecyclerVie
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val currentMessage = messageList[position]
 
-        if(holder.javaClass == SendViewHolder::class.java){ // 보내는 데이터
+        if (holder.javaClass == SendViewHolder::class.java) { // 보내는 데이터
             val viewHolder = holder as SendViewHolder
             viewHolder.sendBind(currentMessage)
-        }
-        else{ // 받는 데이터
+
+        } else if (holder.javaClass == SendImageViewHolder::class.java) { // 이미지를 보내는 데이터
+            val viewHolder = holder as SendImageViewHolder
+            viewHolder.sendImageBind(currentMessage)
+
+        } else if (holder.javaClass == ReceiveViewHolder::class.java){ // 받는 데이터
             val viewHolder = holder as ReceiveViewHolder
             viewHolder.receiveBind(currentMessage)
+        } else {
+            val viewHolder = holder as ReceiveImageViewHolder
+            viewHolder.receiveImageBind(currentMessage)
         }
-
     }
 
-    // 아이템의 갯수 반환 ex) 주소록의 총 주소 개수
     override fun getItemCount():Int = messageList.size
 
-    // 어떤 뷰홀더를 사용할 지 결정 함 -> 현재 접속자 아이디와 sendId가 같으면 sendViewHolder 사용
     override fun getItemViewType(position: Int): Int {
         val currentMessage = messageList[position]
-        //return if(messageList[position].sendId.equals(myUid))
-        return if(FirebaseAuth.getInstance().currentUser?.uid == currentMessage.sendId){
-            send
-        }else{
-            receive
+
+        return when {
+            currentMessage.message!!.isBlank() && FirebaseAuth.getInstance().currentUser?.uid == currentMessage.sendId -> sendImage
+            currentMessage.message!!.isNotBlank() && FirebaseAuth.getInstance().currentUser?.uid == currentMessage.sendId -> send
+            currentMessage.message!!.isBlank()&& FirebaseAuth.getInstance().currentUser?.uid != currentMessage.sendId -> receiveImage
+            currentMessage.message!!.isNotBlank()&& FirebaseAuth.getInstance().currentUser?.uid != currentMessage.sendId -> receive
+            else -> {Log.d("failed","실패ㅕ")}
         }
     }
 
-    // 메세지를 보내는 쪽의 뷰홀더
     class SendViewHolder(private val binding: SendBinding) : RecyclerView.ViewHolder(binding.root){
         fun sendBind(messageList: CMessageData?){
             messageList?.let {
@@ -81,7 +98,6 @@ class CMessageAdapter(private val context: android.content.Context): RecyclerVie
             }
         }
 
-        // 시간 포맷 예뿌게
         fun getDateText(sendData:String): String {
             var dateText =""
             var timeString = ""
@@ -101,7 +117,45 @@ class CMessageAdapter(private val context: android.content.Context): RecyclerVie
                 }
             }
             return dateText
+        }
+    }
+
+    class SendImageViewHolder(private val binding: SendImageBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun sendImageBind(message: CMessageData?) {
+            message?.let {
+                val sendData = it.sendTime
+                val dateText = getDateText(sendData)
+                binding.txtDate.text = dateText
+                if (it.image?.isNotBlank() == true) {
+                Glide.with(binding.imgSend.context)
+                    .load(it.image)
+                    .placeholder(R.drawable.placeholder_image)
+                    .error(R.drawable.error_image)
+                    .into(binding.imgSend)
+                }
+                Log.d("ImageUrlDebug", "Image URL: ${it.image}")            }
+        }
+
+        fun getDateText(sendData:String): String {
+            var dateText =""
+            var timeString = ""
+            if(sendData.isNotBlank()){
+                timeString = sendData.substring(8,12)
+                var hour = timeString.substring(0, 2)
+                var minute = timeString.substring(2, 4)
+
+                var timeformat = "%02d:%02d"
+
+                if (hour.toInt() > 11) {
+                    dateText += "오후 "
+                    dateText += timeformat.format(hour.toInt() - 12, minute.toInt())
+                } else {
+                    dateText += "오전 "
+                    dateText += timeformat.format(hour.toInt(), minute.toInt())
+                }
             }
+            return dateText
+        }
     }
 
     // 메세지 받는 쪽의 뷰홀더
@@ -112,7 +166,6 @@ class CMessageAdapter(private val context: android.content.Context): RecyclerVie
                 val sendData = it.sendTime
                 val dateText = getDateText(sendData)
                 binding.txtDate.text = dateText
-
             }
         }
         fun getDateText(sendData:String): String {
@@ -135,7 +188,43 @@ class CMessageAdapter(private val context: android.content.Context): RecyclerVie
             }
             return dateText
         }
+    }
 
+    class ReceiveImageViewHolder(private val binding: ReceiveImageBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun receiveImageBind(message: CMessageData?) {
+            message?.let {
+                val sendData = it.sendTime
+                val dateText = getDateText(sendData)
+                binding.txtDate.text = dateText
+                if (it.image?.isNotBlank() == true) {
+                    Glide.with(binding.imgReceive.context)
+                        .load(it.image)
+                        .placeholder(R.drawable.placeholder_image)
+                        .error(R.drawable.error_image)
+                        .into(binding.imgReceive)
+                }
+                Log.d("ImageUrlDebug", "Image URL: ${it.image}")            }
+        }
+        fun getDateText(sendData:String): String {
+            var dateText =""
+            var timeString = ""
+            if(sendData.isNotBlank()){
+                timeString = sendData.substring(8,12)
+                var hour = timeString.substring(0, 2)
+                var minute = timeString.substring(2, 4)
+
+                var timeformat = "%02d:%02d"
+
+                if (hour.toInt() > 11) {
+                    dateText += "오후 "
+                    dateText += timeformat.format(hour.toInt() - 12, minute.toInt())
+                } else {
+                    dateText += "오전 "
+                    dateText += timeformat.format(hour.toInt(), minute.toInt())
+                }
+            }
+            return dateText
+        }
     }
 }
 

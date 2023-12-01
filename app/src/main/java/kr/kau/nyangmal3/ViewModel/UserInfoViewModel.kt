@@ -64,7 +64,6 @@ class UserInfoViewModel: ViewModel() {
                             if (success) {
                                 _userProfile.value = _userProfile.value?.copy(profileImageUrl = uri.toString())
                             }
-
                             _updateResult.postValue(success)
                         }
                     }
