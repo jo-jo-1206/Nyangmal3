@@ -1,6 +1,7 @@
 package kr.kau.nyangmal3.repository
 
 import android.net.Uri
+import androidx.datastore.core.Storage
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.Firebase
 import com.google.firebase.database.DataSnapshot
@@ -72,9 +73,17 @@ class SnowRepository {
     // snowItem을 삭제하는 코드를 작성해야 합니다.
     // 예를 들어 Firebase Realtime Database에서 해당 데이터를 삭제하는 코드가 여기에 위치합니다.
     fun deleteData(snowItem: SnowItem) {
+        deleteImage(snowItem)
         val itemKey = snowItem.key // SnowItem에서 키를 가져옴
         if (itemKey != null) {
             snowRef.child(itemKey).removeValue() // 해당 키에 대한 데이터 삭제
         }
+    }
+    fun deleteImage(snowItem: SnowItem) {
+        // Firebase 스토리지 레퍼런스
+        val storageRef = Firebase.storage.getReferenceFromUrl(snowItem.imageUrl)
+
+        // 파일 삭제
+        storageRef.delete()
     }
 }
