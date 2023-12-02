@@ -53,7 +53,7 @@ class SnowFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // 24시간 삭제 (24 * 60 * 60 * 1000)
-        val twentyFourHoursAgo = System.currentTimeMillis() - ( 60 * 60 * 1000)
+        val twentyFourHoursAgo = System.currentTimeMillis() - (24 * 60 * 60 * 1000)
 
         viewModelS.fetchData().observe(viewLifecycleOwner) { snowItems ->
             val itemsToRemove = mutableListOf<SnowItem>()
