@@ -52,9 +52,8 @@ class SnowFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 24시간 삭제 (24 * 60 * 60 * 1000)
+        // 24시간 삭제
         val twentyFourHoursAgo = System.currentTimeMillis() - (24 * 60 * 60 * 1000)
-
         viewModelS.fetchData().observe(viewLifecycleOwner) { snowItems ->
             val itemsToRemove = mutableListOf<SnowItem>()
 
@@ -68,12 +67,11 @@ class SnowFragment : Fragment() {
                 viewModelS.deleteSnow(snowItem)
             }
 
-            // 업데이트된 목록으로 UI 갱신
+            //업데이트된 목록으로 UI 갱신
             val updatedList = snowItems - itemsToRemove
             adapter.setListData(updatedList.toMutableList())
             adapter.notifyDataSetChanged()
         }
-
 
         //어댑터와 데이터리스트 연결
         //근데 챗은 context자리에 this썼는데
@@ -97,18 +95,16 @@ class SnowFragment : Fragment() {
             binding?.recyclerSnows?.scrollToPosition(adapter.itemCount - 1)
         })
 
-
         binding?.snowimageIb?.setOnClickListener {
-            // 이미지 선택 작업 실행
             pickImage()
         }
 
-        //스노우애드 클릭하면 포스트 업데이트될것임.
+        // 스노우애드 클릭하면 포스트 업데이트될것임.
         binding?.snowaddIb?.setOnClickListener {
             val snowText = binding!!.snowtextEt.text.toString()
             val currentTime = System.currentTimeMillis()
             viewModelU.fetchMyName()
-            var isNameFetched = false // 플래그 설정
+            var isNameFetched = false // 플래그 설정 -> 글쓴이 만들라고
             val imageUri = viewModelS.getSelectedImageUri()
 
             // 이미지가 선택되지 않았다면 경고 메시지 표시
@@ -119,10 +115,9 @@ class SnowFragment : Fragment() {
                 //val imageUrl = imageUri.toString()
                 viewModelU.myName.observe(viewLifecycleOwner) { userName ->
                     userName?.let {
-                        if (!isNameFetched) { // 플래그를 확인하여 한 번만 처리
-                            //viewModelS.addImage(imageUri)
+                        if (!isNameFetched) { //플래그를 확인하여 한 번만 처리
                             viewModelS.addSnow(it, snowText, currentTime, imageUri)
-                            binding!!.snowtextEt.setText("") // 설명 전송하면 다시 텍스트 칸 초기화해주기
+                            binding!!.snowtextEt.setText("") // 설명 전송하면 다시 텍스트칸/이미지버튼 초기화
                             binding!!.snowimageIb.setImageResource(R.drawable.image_snow)
                             viewModelS.resetSelectedImageUri()
                             isNameFetched = true // 플래그 변경
@@ -132,7 +127,7 @@ class SnowFragment : Fragment() {
             }
         }
     }
-    // 이미지 선택을 위한 함수
+    //이미지 선택
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
             // ViewModel에 선택된 이미지 URI 전달
