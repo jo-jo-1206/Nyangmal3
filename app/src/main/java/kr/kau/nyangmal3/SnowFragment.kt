@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,14 +26,12 @@ class SnowFragment : Fragment() {
     }
     //ㄴ fragment는 context상속안받아져있어서 필요한거 아래에서 쓸라고 이렇게 해줌
 
-
     var binding: FragmentSnowBinding? = null
     private lateinit var adapter: SnowAdapter
 
     private val viewModelS: SnowViewModel by viewModels()
     private val viewModelU: UserInfoViewModel by viewModels()
 
-    // Toast 메시지를 보여주는 함수
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
@@ -55,8 +52,7 @@ class SnowFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 24시간 이전의 timestamp를 가져오기
-
+        // 24시간 삭제
         val twentyFourHoursAgo = System.currentTimeMillis() - (24 * 60 * 60 * 1000)
 
         viewModelS.fetchData().observe(viewLifecycleOwner) { snowItems ->
@@ -135,30 +131,6 @@ class SnowFragment : Fragment() {
                 }
             }
         }
-
-//        binding?.snowaddIb?.setOnClickListener {
-//            val snowText = binding!!.snowtextEt.text.toString()
-//            val currentTime = System.currentTimeMillis()
-//
-//            // 이미 이름을 가져왔는지 확인하는 LiveData
-//            val nameFetchedObserver = Observer<String> { userName ->
-//                userName?.let {
-//                    viewModelS.addSnow(it, snowText, currentTime)
-//                    binding!!.snowtextEt.setText("") // 설명 전송하면 다시 텍스트 칸 초기화
-//                    // 관찰이 끝났으므로 관찰 해제
-//                    viewModelU.myName.removeObserver(this)
-//                }
-//            }
-//
-//            // 이름을 가져오기 위한 ViewModel의 메서드 호출
-//            viewModelU.fetchMyName()
-//
-//            // 이미 이름을 가져왔는지를 관찰하는 Observer를 등록
-//            viewModelU.myName.observe(viewLifecycleOwner, nameFetchedObserver)
-//        }
-
-        //이미지 업로드 클릭하면 선택한이미지를 파이어베이스에 업로드하고 이미지선택을위해 갤러리 인텐트 호출해줘야함
-        //binding?.snowimageIb?.setOnClickListener {}
     }
     // 이미지 선택을 위한 함수
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -170,17 +142,8 @@ class SnowFragment : Fragment() {
         } ?: showToast("이미지 선택이 취소되었습니다.")
     }
     private fun pickImage() {
-//        val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-//            uri?.let {
-//                // ViewModel에 선택된 이미지 URI 전달
-//                viewModelS.setSelectedImageUri(uri)
-//                // 이미지 버튼 업데이트
-//                binding?.snowimageIb?.setImageURI(uri)
-//            } ?: showToast("이미지 선택이 취소되었습니다.")
-//        }
         getContent.launch("image/*")
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
