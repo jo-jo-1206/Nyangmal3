@@ -10,6 +10,8 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import com.google.firebase.storage.storage
 import kr.kau.nyangmal3.SnowItem
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 class SnowRepository {
@@ -45,7 +47,7 @@ class SnowRepository {
     }
 
     // 텍스트 데이터베이스에 업로드
-    fun uploadText(userName: String, snowText: String, currentTime: Long, imageUrl: Uri) {
+    fun uploadText(userName: String, snowText: String, currentTime: Long, url: String) {
         /*val imageUploadTask = uploadImage(imageUrl)
 
         imageUploadTask.addOnSuccessListener { imageUri ->
@@ -62,22 +64,44 @@ class SnowRepository {
         val newItemRef = snowRef.push() // 새로운 데이터를 추가하고 반환된 참조를 newItemRef에 저장
         val newItemKey = newItemRef.key // 추가된 데이터의 고유한 키를 가져옴
 
-        val text: SnowItem = SnowItem(userName, newItemKey, snowText, currentTime, imageUrl.toString())
+        val text: SnowItem = SnowItem(userName, newItemKey, snowText, currentTime, url)
         newItemKey?.let { snowRef.child(it).setValue(text) }
 
     }
-    fun uploadImage(imageUri: Uri): Task<Uri> {
-        val imageName = "${System.currentTimeMillis()}_image.jpg" // 이미지 파일명 생성
-        val imageRef = Firebase.storage.reference.child("snow/$imageName") // Firebase Storage 경로 지정
+    /*fun uploadImage(imageUri: Uri) {
+        // 이미지 파일명 생성
+        val imageRef = Firebase.storage.reference.child("snow/${System.currentTimeMillis()}.jpg") // Firebase Storage 경로 지정
 
         // 이미지를 Firebase Storage에 업로드
-        return imageRef.putFile(imageUri)
-            .continueWithTask { task ->
-                if (!task.isSuccessful) {
-                    task.exception?.let { throw it }
+        imageRef.putFile(imageUri)
+            .addOnSuccessListener {
+                imageRef.downloadUrl.addOnCanceledListener { downloadUri ->
+                    continuation.resume(downloadUri.toString())
+                }.addOnFailureListener {
+                    continuation.resume(null)
                 }
-                // 이미지 업로드가 성공하면 다운로드 URL을 반환
-                imageRef.downloadUrl
+            }
+//        return imageRef.putFile(imageUri)
+//            .continueWithTask { task ->
+//                if (!task.isSuccessful) {
+//                    task.exception?.let { throw it }
+//                }
+//                // 이미지 업로드가 성공하면 다운로드 URL을 반환
+//                imageRef.downloadUrl
+//            }
+    }*/
+    fun uploadImage(imageUri: Uri, callback: (String?) -> Unit) {
+        val fileName = Firebase.storage.reference.child("snow/${System.currentTimeMillis()}.jpg")
+        fileName.putFile(imageUri)
+            .addOnSuccessListener { _ ->
+                fileName.downloadUrl.addOnSuccessListener { downloadUri ->
+                    callback.invoke(downloadUri.toString())
+                }.addOnFailureListener {
+                    callback.invoke(null)
+                }
+            }
+            .addOnFailureListener {
+                callback.invoke(null)
             }
     }
 

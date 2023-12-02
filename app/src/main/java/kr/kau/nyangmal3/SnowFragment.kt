@@ -124,7 +124,7 @@ class SnowFragment : Fragment() {
                 viewModelU.myName.observe(viewLifecycleOwner) { userName ->
                     userName?.let {
                         if (!isNameFetched) { // 플래그를 확인하여 한 번만 처리
-                            viewModelS.addImage(imageUri)
+                            //viewModelS.addImage(imageUri)
                             viewModelS.addSnow(it, snowText, currentTime, imageUri)
                             binding!!.snowtextEt.setText("") // 설명 전송하면 다시 텍스트 칸 초기화해주기
                             binding!!.snowimageIb.setImageResource(R.drawable.image_snow)
