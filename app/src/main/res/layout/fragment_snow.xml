@@ -25,7 +25,8 @@
         android:src="@drawable/image_snow"
         app:layout_constraintStart_toEndOf="@id/snowtext_et"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="17dp"/>
+        android:layout_marginStart="17dp"
+        android:scaleType="fitXY"/>
     <ImageButton
         android:id="@+id/snowadd_ib"
         android:layout_width="80dp"

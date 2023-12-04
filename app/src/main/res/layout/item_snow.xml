@@ -3,9 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginTop="20dp"
-    android:layout_marginBottom="10dp">
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/black"
+        android:layout_marginBottom="20dp"/>
 
     <TextView
         android:id="@+id/userName_tv"
@@ -30,14 +34,19 @@
         android:textSize="32sp"
         android:text="사진에 대한 간단한 설명"
         android:layout_marginTop="4dp"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="12dp"/>
 
     <TextView
         android:id="@+id/timestamp_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="22sp"
-        android:text="현재시간"
-        android:layout_marginBottom="8dp"/>
+        android:text="현재시간"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/black"
+        android:layout_marginTop="15dp"/>
 
 </LinearLayout>
