@@ -12,9 +12,7 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import kr.kau.nyangmal3.databinding.FragmentSettingsBinding
 
-//private lateinit var sharedPreferences: SharedPreferences
-
-class SettingsFragment : Fragment(){
+class SettingsFragment : Fragment(R.layout.fragment_settings){
     private var _binding:FragmentSettingsBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
@@ -24,15 +22,12 @@ class SettingsFragment : Fragment(){
     ): View? {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
 
-
         childFragmentManager.beginTransaction()
             .add(R.id.fragment_container,PreferenceSettingFragment())
             .addToBackStack(null)
             .commit()
-
         return binding.root
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

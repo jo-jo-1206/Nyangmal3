@@ -20,30 +20,27 @@ class CMessageViewModel : ViewModel() {
     private val repository = CMessageRepository()
     private val _updateResult = MutableLiveData<Boolean>()
     private val mauth: FirebaseAuth = FirebaseAuth.getInstance()
-
-
-    private val senderUid: String? = mauth.currentUser?.uid
+    private val senderUid: String = mauth.currentUser!!.uid
 
     fun setReciveUid(uid: String) {
         repository.setReciveUid(uid)
     }
 
     fun fetchData(): LiveData<MutableList<CMessageData>> {
-        val mutableData = MutableLiveData<MutableList<CMessageData>>()
-        repository.observeMessage().observeForever {
-            mutableData.value = it
-        }
-        return mutableData
+//        val mutableData = MutableLiveData<MutableList<CMessageData>>()
+//        repository.observeMessage().observeForever {
+//            mutableData.value = it
+//        }
+//        return mutableData
+        return repository.observeMessage()
     }
 
     fun addMessage(data: CMessageData){
-        //레파지토리를 이용해 데이터베이스에 값을 저장
         repository.addMessage(data)
     }
 
     fun updateImage(uri: Uri){
         val fileName = Firebase.storage.reference.child("chat/$senderUid-${System.currentTimeMillis()}.jpg")
-        // 파이어베이스 스토리지의 chat 아래에 uri를 저장해라.
         fileName.putFile(uri)
             .addOnSuccessListener {
                 fileName.downloadUrl.addOnSuccessListener { uri ->
@@ -55,7 +52,6 @@ class CMessageViewModel : ViewModel() {
             }
     }
 
-    // 시간 가져오기
     fun getTime():String{
         return repository.getTime()
     }
