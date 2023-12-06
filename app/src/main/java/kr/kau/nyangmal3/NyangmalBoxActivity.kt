@@ -26,6 +26,10 @@ class NyangmalBoxActivity : AppCompatActivity() {
 
             viewModel.deleteNynagmal(adapter.getItemAt(position))
             adapter.removeItem(position)
+
+            if (position == 0) {
+                binding.nyangcntTv.text = "0"
+            }
         }
         binding.recyclerNyangmals.layoutManager = LinearLayoutManager(this)
         binding.recyclerNyangmals.adapter = adapter

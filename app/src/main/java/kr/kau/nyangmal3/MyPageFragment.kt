@@ -63,8 +63,14 @@ class MyPageFragment : Fragment() {
 
     private fun updateUI(user: User) {
         binding.txtUserName.text = user.name
-        val profileImageUrl = user.profileImageUrl ?: R.drawable.defaultprofpic
-        Glide.with(this).load(profileImageUrl).into(binding.imgMyProfilePic)
+        var profileImageUrl = user.profileImageUrl
+
+        if (profileImageUrl.isNullOrEmpty()) {
+            Glide.with(this).load(R.drawable.defaultprofpic).into(binding.imgMyProfilePic)
+        } else {
+            Glide.with(this).load(profileImageUrl).into(binding.imgMyProfilePic)
+        }
+
         Log.d("ImageUrlDebug", "Image URL: ${user.profileImageUrl}")
     }
 
