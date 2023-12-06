@@ -21,24 +21,25 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class PreferenceSettingFragment:PreferenceFragmentCompat {
-    lateinit var auth: FirebaseAuth
 
-    private lateinit var DbRef: DatabaseReference
+class PreferenceSettingFragment:PreferenceFragmentCompat {
 
     constructor() : super()
-    private val mauth: FirebaseAuth = FirebaseAuth.getInstance()
-    val currentUser: String? = mauth.currentUser?.uid
 
-    lateinit var prefs: SharedPreferences
-    var messagePreference: Preference? = null
-    var dark_modePreference: Preference? = null
-    var soundListPreference: Preference? = null
-    var logoutPreference: Preference? = null
-    var accountPreference: Preference? = null
+    private val auth: FirebaseAuth = Firebase.auth
+    private val DbRef: DatabaseReference = Firebase.database.reference
+    private val mauth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val currentUser: String? = mauth.currentUser?.uid
+
+    private lateinit var prefs: SharedPreferences
+    private var messagePreference: Preference? = null
+    private var dark_modePreference: Preference? = null
+    private var soundListPreference: Preference? = null
+    private var logoutPreference: Preference? = null
+    private var accountPreference: Preference? = null
+
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.setting, rootKey)
-        auth = Firebase.auth
         prefs = preferenceManager.sharedPreferences!!
 
         if (rootKey == null) {
@@ -49,10 +50,8 @@ class PreferenceSettingFragment:PreferenceFragmentCompat {
             logoutPreference = findPreference("logout")
             accountPreference = findPreference("account")
 
-            //prefs = requireActivity().getSharedPreferences("message", Context.MODE_PRIVATE)
 
             if (prefs.getString("sound_list", "") != "") {
-                // ListPreference의 summary를 sound_list key에 해당하는 값으로 설정
                 soundListPreference?.summary = prefs.getString("sound_list", "냥냥")
             }
 
@@ -64,7 +63,6 @@ class PreferenceSettingFragment:PreferenceFragmentCompat {
                 startActivity(intent)
                 true
             }
-            DbRef= Firebase.database.reference // db 초기화
 
             // 내 계정 가져오기
             DbRef.child("user").child(currentUser!!).child("email")
@@ -73,16 +71,13 @@ class PreferenceSettingFragment:PreferenceFragmentCompat {
                         accountPreference?.summary = snapshot.value.toString()
                     }
                     override fun onCancelled(error: DatabaseError) {
-
                     }
-
                 })
         }
     }
 
     val prefListener =
         SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences: SharedPreferences?, key: String? ->
-            // key는 xml에 등록된 key에 해당
             when (key) {
                 "message" -> {
                     val value = prefs.getBoolean("message", false)

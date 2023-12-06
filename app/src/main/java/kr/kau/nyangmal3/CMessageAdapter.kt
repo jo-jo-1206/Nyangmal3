@@ -24,13 +24,12 @@ class CMessageAdapter(private val context: android.content.Context): RecyclerVie
     private val sendImage = 3
     private val receiveImage = 4
 
-    private var messageList = mutableListOf<CMessageData>() // 리스트에는 Message타입의 데이터가 들어감
+    private var messageList = mutableListOf<CMessageData>()
     fun setListData(data: MutableList<CMessageData>){
         messageList = data
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        // return if - else 문으로 할 떈 안됐는데 when()으로 하니깐 됨. 뭐지??
         return when(viewType){
             send ->{
                 val binding = SendBinding.inflate(LayoutInflater.from(context),parent,false)
@@ -47,7 +46,6 @@ class CMessageAdapter(private val context: android.content.Context): RecyclerVie
             }
             receiveImage ->{
                 val binding = ReceiveImageBinding.inflate(LayoutInflater.from(context), parent, false)
-                Log.d("receiveImage","recieveImage")
                 ReceiveImageViewHolder(binding)
             }
             else -> {throw IllegalArgumentException("Invalid view type: $viewType")}
@@ -57,20 +55,11 @@ class CMessageAdapter(private val context: android.content.Context): RecyclerVie
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val currentMessage = messageList[position]
 
-        if (holder.javaClass == SendViewHolder::class.java) { // 보내는 데이터
-            val viewHolder = holder as SendViewHolder
-            viewHolder.sendBind(currentMessage)
-
-        } else if (holder.javaClass == SendImageViewHolder::class.java) { // 이미지를 보내는 데이터
-            val viewHolder = holder as SendImageViewHolder
-            viewHolder.sendImageBind(currentMessage)
-
-        } else if (holder.javaClass == ReceiveViewHolder::class.java){ // 받는 데이터
-            val viewHolder = holder as ReceiveViewHolder
-            viewHolder.receiveBind(currentMessage)
-        } else {
-            val viewHolder = holder as ReceiveImageViewHolder
-            viewHolder.receiveImageBind(currentMessage)
+        when (holder) {
+            is SendViewHolder -> holder.sendBind(currentMessage)
+            is SendImageViewHolder -> holder.sendImageBind(currentMessage)
+            is ReceiveViewHolder -> holder.receiveBind(currentMessage)
+            is ReceiveImageViewHolder -> holder.receiveImageBind(currentMessage)
         }
     }
 
@@ -80,52 +69,29 @@ class CMessageAdapter(private val context: android.content.Context): RecyclerVie
         val currentMessage = messageList[position]
 
         return when {
-            currentMessage.message!!.isBlank() && FirebaseAuth.getInstance().currentUser?.uid == currentMessage.sendId -> sendImage
-            currentMessage.message!!.isNotBlank() && FirebaseAuth.getInstance().currentUser?.uid == currentMessage.sendId -> send
-            currentMessage.message!!.isBlank()&& FirebaseAuth.getInstance().currentUser?.uid != currentMessage.sendId -> receiveImage
-            currentMessage.message!!.isNotBlank()&& FirebaseAuth.getInstance().currentUser?.uid != currentMessage.sendId -> receive
-            else -> {Log.d("failed","실패ㅕ")}
+            currentMessage.message?.isBlank() == true && FirebaseAuth.getInstance().currentUser?.uid == currentMessage.sendId -> sendImage
+            currentMessage.message?.isNotBlank() == true && FirebaseAuth.getInstance().currentUser?.uid == currentMessage.sendId -> send
+            currentMessage.message?.isBlank() == true && FirebaseAuth.getInstance().currentUser?.uid != currentMessage.sendId -> receiveImage
+            currentMessage.message?.isNotBlank() == true && FirebaseAuth.getInstance().currentUser?.uid != currentMessage.sendId -> receive
+            else -> {
+                throw IllegalArgumentException("Invalid message type")
+            }
         }
     }
 
     class SendViewHolder(private val binding: SendBinding) : RecyclerView.ViewHolder(binding.root){
-        fun sendBind(messageList: CMessageData?){
-            messageList?.let {
+        fun sendBind(message: CMessageData?){
+            message?.let {
                 binding.sendMessage.text = it.message
-                val sendData = it.sendTime
-                val dateText = getDateText(sendData)
-                binding.txtDate.text = dateText
+                binding.txtDate.text = message.sendTime
             }
-        }
-
-        fun getDateText(sendData:String): String {
-            var dateText =""
-            var timeString = ""
-            if(sendData.isNotBlank()){
-                timeString = sendData.substring(8,12)
-                var hour = timeString.substring(0, 2)
-                var minute = timeString.substring(2, 4)
-
-                var timeformat = "%02d:%02d"
-
-                if (hour.toInt() > 11) {
-                    dateText += "오후 "
-                    dateText += timeformat.format(hour.toInt() - 12, minute.toInt())
-                } else {
-                    dateText += "오전 "
-                    dateText += timeformat.format(hour.toInt(), minute.toInt())
-                }
-            }
-            return dateText
         }
     }
 
     class SendImageViewHolder(private val binding: SendImageBinding) : RecyclerView.ViewHolder(binding.root) {
         fun sendImageBind(message: CMessageData?) {
             message?.let {
-                val sendData = it.sendTime
-                val dateText = getDateText(sendData)
-                binding.txtDate.text = dateText
+                binding.txtDate.text = message.sendTime
                 if (it.image?.isNotBlank() == true) {
                 Glide.with(binding.imgSend.context)
                     .load(it.image)
@@ -133,69 +99,25 @@ class CMessageAdapter(private val context: android.content.Context): RecyclerVie
                     .error(R.drawable.error_image)
                     .into(binding.imgSend)
                 }
-                Log.d("ImageUrlDebug", "Image URL: ${it.image}")            }
-        }
-
-        fun getDateText(sendData:String): String {
-            var dateText =""
-            var timeString = ""
-            if(sendData.isNotBlank()){
-                timeString = sendData.substring(8,12)
-                var hour = timeString.substring(0, 2)
-                var minute = timeString.substring(2, 4)
-
-                var timeformat = "%02d:%02d"
-
-                if (hour.toInt() > 11) {
-                    dateText += "오후 "
-                    dateText += timeformat.format(hour.toInt() - 12, minute.toInt())
-                } else {
-                    dateText += "오전 "
-                    dateText += timeformat.format(hour.toInt(), minute.toInt())
-                }
+                Log.d("ImageUrlDebug", "Image URL: ${it.image}")
             }
-            return dateText
         }
     }
 
     // 메세지 받는 쪽의 뷰홀더
     class ReceiveViewHolder(private val binding: ReceiveBinding) : RecyclerView.ViewHolder(binding.root){
-        fun receiveBind(messageList: CMessageData?) {
-            messageList?.let {
+        fun receiveBind(message: CMessageData?) {
+            message?.let {
                 binding.receiveMessage.text = it.message
-                val sendData = it.sendTime
-                val dateText = getDateText(sendData)
-                binding.txtDate.text = dateText
+                binding.txtDate.text = message.sendTime
             }
-        }
-        fun getDateText(sendData:String): String {
-            var dateText =""
-            var timeString = ""
-            if(sendData.isNotBlank()){
-                timeString = sendData.substring(8,12)
-                var hour = timeString.substring(0, 2)
-                var minute = timeString.substring(2, 4)
-
-                var timeformat = "%02d:%02d"
-
-                if (hour.toInt() > 11) {
-                    dateText += "오후 "
-                    dateText += timeformat.format(hour.toInt() - 12, minute.toInt())
-                } else {
-                    dateText += "오전 "
-                    dateText += timeformat.format(hour.toInt(), minute.toInt())
-                }
-            }
-            return dateText
         }
     }
 
     class ReceiveImageViewHolder(private val binding: ReceiveImageBinding) : RecyclerView.ViewHolder(binding.root) {
         fun receiveImageBind(message: CMessageData?) {
             message?.let {
-                val sendData = it.sendTime
-                val dateText = getDateText(sendData)
-                binding.txtDate.text = dateText
+                binding.txtDate.text = message.sendTime
                 if (it.image?.isNotBlank() == true) {
                     Glide.with(binding.imgReceive.context)
                         .load(it.image)
@@ -204,26 +126,6 @@ class CMessageAdapter(private val context: android.content.Context): RecyclerVie
                         .into(binding.imgReceive)
                 }
                 Log.d("ImageUrlDebug", "Image URL: ${it.image}")            }
-        }
-        fun getDateText(sendData:String): String {
-            var dateText =""
-            var timeString = ""
-            if(sendData.isNotBlank()){
-                timeString = sendData.substring(8,12)
-                var hour = timeString.substring(0, 2)
-                var minute = timeString.substring(2, 4)
-
-                var timeformat = "%02d:%02d"
-
-                if (hour.toInt() > 11) {
-                    dateText += "오후 "
-                    dateText += timeformat.format(hour.toInt() - 12, minute.toInt())
-                } else {
-                    dateText += "오전 "
-                    dateText += timeformat.format(hour.toInt(), minute.toInt())
-                }
-            }
-            return dateText
         }
     }
 }
