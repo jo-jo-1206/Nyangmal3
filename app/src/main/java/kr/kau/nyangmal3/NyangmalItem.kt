@@ -5,4 +5,4 @@ data class NyangmalItem(
     val nyangText: String
 ){
     constructor():this("","")
-}
+} // 빈 문자열로 초기화
