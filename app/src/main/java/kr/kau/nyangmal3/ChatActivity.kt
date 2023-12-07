@@ -18,6 +18,7 @@ class ChatActivity : AppCompatActivity() {
 
     private lateinit var adapter: CMessageAdapter
     private val viewModel: CMessageViewModel by viewModels()
+
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
             viewModel.updateImage(it)
@@ -46,13 +47,13 @@ class ChatActivity : AppCompatActivity() {
             if(messageText.isNotEmpty()){
                 viewModel.addMessage(messageData)
             }
-            // 메세지 전송 후 텍스트칸 초기화
+            // 메세지 전송 후 텍스트 칸 초기화
             binding.edtMessage.setText("")
         }
 
-        /* 뒤로가기 버튼 */
+        /* 뒤로 가기 버튼 */
         binding.btnBack.setOnClickListener {
-            finish();
+            finish()
         }
 
         /* 이미지 보내기 버튼 */

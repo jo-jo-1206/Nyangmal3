@@ -37,6 +37,7 @@ class CMessageRepository {
 
                 override fun onDataChange(snapshot: DataSnapshot) {
                     listData.clear()
+                    // 해당 위치의 데이터를 하나씩 snapshot에 담아서 가져옴
                     for (postSnapshat in snapshot.children) {
                         val getData = postSnapshat.getValue(CMessageData::class.java)
                         getData?.let {
@@ -66,8 +67,10 @@ class CMessageRepository {
     }
 
     fun updateImage(uri: String) {
+        // 대화방 ID
         val sendRoom = generateRoomId(senderUid, reciveUid!!)
         val receiveRoom = generateRoomId(reciveUid!!, senderUid)
+
         val imageUrl = uri
         val messageMap = mapOf(
             "message" to "",
@@ -77,7 +80,6 @@ class CMessageRepository {
         )
         chatRef.child(sendRoom).push().setValue(messageMap)
         chatRef.child(receiveRoom).push().setValue(messageMap)
-
     }
 
     private fun generateRoomId(uid1: String, uid2: String): String {
